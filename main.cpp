@@ -7,9 +7,12 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro_ttf.h>
+
 #include "sprite.h"
 #include "menu.h"
 #include "unit.h"
+#include "unitStructure.h"
+#include "unitManager.h"
 
 const int FPS = 10;
 // const unsigned int granularity = 50;
@@ -54,24 +57,24 @@ int main(int argc, char const *argv[])
 	// menu.add_button(50, 50, button, "holaa", color);
 	// menu.display(200, 200);
 	
-	//imagenes
-	// vector<ALLEGRO_BITMAP*> bmp(2);
-	// bmp[0] = al_load_bitmap("resources/sprite.png");
-	// bmp[1] = al_load_bitmap("resources/sprite2.png");
-	// // al_draw_bitmap(bmp[0], 0, 0, 0);
-	// if (!bmp[0] || !bmp[1]) cerr << "Error loading bitmap\n";
+	//unitStructure
+	unitStructure uStr("resources/units", backbuffer);
 	
-	// sprite s(bmp, backbuffer, 50, 50, 50);
-	// sprite s2(bmp, backbuffer, 50, 50, 50);
-	
+	// unitManager
+	unitManager uMgr(uStr);
+	uMgr.create_unit(0, 200, 200);
+	uMgr.create_unit(0, 800, 400);
+	uMgr.create_unit(0, 900, 100);
+
 	// unit
-	cerr << "creando unidad \n";
-	ALLEGRO_BITMAP * bmp = al_load_bitmap("resources/Man50.png");
-	if (!bmp) cerr << "ERROR: creando bitmap man50\n";
-	unit man(bmp, backbuffer, 50);
-	cerr << "unidad creada \n";
-	man.set_position(200,200);
-	man.draw();
+	// cerr << "creando unidad \n";
+	// ALLEGRO_BITMAP * bmp = al_load_bitmap("resources/Man50.png");
+	// if (!bmp) cerr << "ERROR: creando bitmap man50\n";
+	// unit man(bmp, backbuffer, 50);
+	// cerr << "unidad creada \n";
+	// unit man = unitStr.create_unit(0);
+	// man.set_position(200,200);
+	// man.draw();
 	
 	
 	// eventos
@@ -95,17 +98,12 @@ int main(int argc, char const *argv[])
 		// if (!ev) cerr << "Error en el mouse event\n";
 		switch(ev.type) {
 			case ALLEGRO_EVENT_TIMER:
-				man.clear();
-				man.draw();
+				uMgr.tick();
 				al_flip_display();
-				// al_flip_display();
-				// al_flip_display();
-				// al_flip_display();
-				// al_draw_bitmap(img[i], display->w / 2, display->h / 2, 0);
 				break; 
 			case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
 				if(ev.mouse.button == 2) {
-					man.move(ev.mouse.x, ev.mouse.y);
+					uMgr.left_click(ev.mouse.x, ev.mouse.y);
 				}
 				break;
 			

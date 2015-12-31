@@ -6,10 +6,10 @@
 
 
 class sprite {
-	protected:
+	private:
 		
 		ALLEGRO_BITMAP* bmp;
-		ALLEGRO_BITMAP * screen;
+		ALLEGRO_BITMAP * backbuffer;
 		int size;
 		
 		int frame;  // numero de frame actual
@@ -19,15 +19,12 @@ class sprite {
 		int pre_x;
 		int pre_y;
 		ALLEGRO_BITMAP * bg; // background
+		
+		bool cleared;
 	
 	public:
-		/* Constructor de sprite. Recibe:
-			bitmaps: vector con los bitmaps de cada estado
-			height, width: alto y ancho de cada fotograma
-			margin: separacion entre frames
-		*/
-		sprite(ALLEGRO_BITMAP* bitmaps, ALLEGRO_BITMAP * backbuffer, int size);
-		
+		sprite(ALLEGRO_BITMAP* bitmap, ALLEGRO_BITMAP * backbuffer, int size);
+		sprite(const sprite & s);
 		~sprite();
 		
 		// dibujar siguiente fotograma en pos x, y

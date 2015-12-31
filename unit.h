@@ -1,7 +1,18 @@
 #pragma once
 #include "sprite.h"
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 
-// float speed = 5;
+#define MAX_NAME_LENGTH 16
+
+struct unitType {
+	
+	char name[MAX_NAME_LENGTH];
+	float speed;
+	
+	ALLEGRO_BITMAP * bmp;
+	int framesize;
+} __attribute__ ((__packed__)) ;
 
 enum state {
 	down,
@@ -24,13 +35,14 @@ class unit {
 		sprite sprt;
 		int pos_x;
 		int pos_y;
-		int dst_x;
-		int dst_y;
 		
-		static float speed;
+		unitType type;
 		
 	public:
-		unit(ALLEGRO_BITMAP* bitmap, ALLEGRO_BITMAP * backbuffer, int size);
+		int dst_x;
+		int dst_y;
+		unit(unitType & type, ALLEGRO_BITMAP * backbuffer);
+		unit(const unit & u);
 		void move(int x, int y);
 		void clear();
 		void draw();
