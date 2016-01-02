@@ -1,5 +1,5 @@
 CPPFLAGS= -g -std=c++11
-OBJS=sprite.o menu.o unit.o unitStructure.o unitManager.o
+OBJS=sprite.o menu.o unit.o unitStructure.o unitManager.o cursor.o
 # LIBALLEGRO = $(pkg-config --libs allegro-5.0 allegro_audio-5.0 allegro_acodec-5.0 allegro_image-5.0 allegro_font-5.0 allegro_color-5.0 allegro_t)
 
 main: main.cpp $(OBJS) fastsqrt.h
