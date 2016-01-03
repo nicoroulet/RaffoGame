@@ -11,6 +11,7 @@
 #include "sprite.h"
 #include "menu.h"
 #include "unit.h"
+#include "cursor.h"
 #include "unitStructure.h"
 #include "unitManager.h"
 
@@ -90,6 +91,10 @@ int main(int argc, char const *argv[])
 	al_register_event_source(events, al_get_display_event_source(display));
 	al_register_event_source(events, al_get_timer_event_source(timer));
 	al_start_timer(timer);
+
+	ALLEGRO_BITMAP * cursor_map = al_load_bitmap("resources/cursor.png");
+	cursor raton(cursor_map, display);
+	
 	int x=0; int y=0;
 	bool repeat = true;
 	while(repeat) {
