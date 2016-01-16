@@ -7,13 +7,14 @@
 #define M_ATTACK 1
 #define M_SELECT 2
 #define M_REPAIR 3
-
+#define M_WAIT	 4
 
 cursor::cursor(ALLEGRO_BITMAP *parent, ALLEGRO_DISPLAY *display){
-	split_sprites[M_NORMAL] = al_create_sub_bitmap(parent,3,3,67,85);
-	split_sprites[M_ATTACK] = al_create_sub_bitmap(parent,(3+67)*4,3,67,85);
-	split_sprites[M_SELECT] = al_create_sub_bitmap(parent,3,3,67,85);
-	split_sprites[M_REPAIR] = al_create_sub_bitmap(parent,3,3,67,85);
+	split_sprites[M_NORMAL] = al_create_sub_bitmap(parent,30,42,40,46);
+	split_sprites[M_ATTACK] = al_create_sub_bitmap(parent,306,42,40,46);
+	split_sprites[M_SELECT] = al_create_sub_bitmap(parent,236,42,40,46);
+	split_sprites[M_REPAIR] = al_create_sub_bitmap(parent,512,25,40,46);
+	split_sprites[M_WAIT] = al_create_sub_bitmap(parent,86,24,36,38);
 	
 	ALLEGRO_MOUSE_STATE *state = new ALLEGRO_MOUSE_STATE;
 	al_get_mouse_state(state);
