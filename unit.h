@@ -14,7 +14,7 @@ struct unitType {
 	int framesize;
 } __attribute__ ((__packed__)) ;
 
-enum state {
+enum direction {
 	down,
 	down_left,
 	left,
@@ -35,16 +35,25 @@ class unit {
 		sprite sprt;
 		int pos_x;
 		int pos_y;
-		
-		unitType type;
-		
-	public:
 		int dst_x;
 		int dst_y;
-		unit(unitType & type, ALLEGRO_BITMAP * backbuffer);
-		unit(const unit & u);
+		
+		
+		unitType * type;
+		unit(unit & u);
+		
+	public:
+		unit();
+		void create_unit(unitType * t, ALLEGRO_BITMAP * backbuffer);
+		void delete_unit();
+		
 		void move(int x, int y);
 		void clear();
 		void draw();
 		void set_position(int x, int y);
+		int y();
+		int x();
+		bool operator<(unit & other);
+		bool is_clicked(int x, int y); // la unidad esta en la posicion x, y
+		bool is_broadly_clicked(int x, int y);
 };

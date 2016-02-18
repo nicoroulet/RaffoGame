@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
 	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 	ALLEGRO_DISPLAY * display = al_create_display(5000, 5000);
 	ALLEGRO_BITMAP * backbuffer = al_get_backbuffer(display);
-	al_clear_to_color(al_map_rgb(0,0,0));
+	al_clear_to_color(al_map_rgb(0,100,0));
 	//audio
 	// ALLEGRO_SAMPLE * audio = al_load_sample("audio.wav");
 	// if (!audio) cerr << "Error cargando audio\n";
@@ -59,7 +59,7 @@ int main(int argc, char const *argv[])
 	// menu.display(200, 200);
 	
 	//unitStructure
-	unitStructure uStr("resources/units", backbuffer);
+	unitStructure uStr("resources/units", backbuffer, 50);
 	
 	// unitManager
 	unitManager uMgr(uStr);
@@ -92,8 +92,8 @@ int main(int argc, char const *argv[])
 	al_register_event_source(events, al_get_timer_event_source(timer));
 	al_start_timer(timer);
 
-	ALLEGRO_BITMAP * cursor_map = al_load_bitmap("resources/cursor.png");
-	cursor raton(cursor_map, display);
+	// ALLEGRO_BITMAP * cursor_map = al_load_bitmap("resources/cursor.png");
+	// cursor raton(cursor_map, display);
 	
 	int x=0; int y=0;
 	bool repeat = true;
@@ -107,8 +107,12 @@ int main(int argc, char const *argv[])
 				al_flip_display();
 				break; 
 			case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-				if(ev.mouse.button == 2) {
-					uMgr.left_click(ev.mouse.x, ev.mouse.y);
+				// std::cerr << ev.mouse.button;
+				if (ev.mouse.button == 1) {
+					uMgr.right_unclick(ev.mouse.x, ev.mouse.y);
+				}
+				if (ev.mouse.button == 2) {
+					uMgr.left_unclick(ev.mouse.x, ev.mouse.y);
 				}
 				break;
 			

@@ -21,12 +21,14 @@ class sprite {
 		ALLEGRO_BITMAP * bg; // background
 		
 		bool cleared;
+		sprite(const sprite & s);
 	
 	public:
-		sprite(ALLEGRO_BITMAP* bitmap, ALLEGRO_BITMAP * backbuffer, int size);
-		sprite(const sprite & s);
+		sprite();
 		~sprite();
 		
+		void create_sprite(ALLEGRO_BITMAP* bitmap, ALLEGRO_BITMAP * backbuffer, int size);
+		void delete_sprite();
 		// dibujar siguiente fotograma en pos x, y
 		void draw(int x, int y); 
 		
@@ -35,5 +37,12 @@ class sprite {
 		void clear();
 		
 		void change_status(int new_status);
-			
+		
+		bool is_clicked(int x, int y); // la unidad esta en la posicion x, y
+		bool is_broadly_clicked(int x, int y);
+		
+		ALLEGRO_COLOR get_pixel(int x, int y);
+		
+		int get_size();
+		
 };
