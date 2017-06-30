@@ -8,7 +8,7 @@ class static_queue {
 public:
 	static_queue(int s): size(s), array(s) {
 		begin = end = 0;
-		std::cerr << size << "\n";
+		std::cerr << size << " sq\n";
 	}
 	~static_queue() {
 		std::cerr << "Destroying static_queue\n";
@@ -39,7 +39,7 @@ public:
 	bool empty(){
 		return (end == begin);
 	}
-	
+
 private:
 	std::vector<T> array;
 	int begin;

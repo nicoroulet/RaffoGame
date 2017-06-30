@@ -50,19 +50,19 @@ int main(int argc, char const *argv[])
 	// if (!al_reserve_samples(1)) cerr << "Error reservando samples\n";
 	// // al_play_sample(audio, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 	// cerr << "Reproduciendo\n";
-	
+
 	// menu
-	// menu menu("resources/menu.png");
-	// ALLEGRO_BITMAP * button = al_load_bitmap("resources/button.png");
+	// menu menu("res/menu.png");
+	// ALLEGRO_BITMAP * button = al_load_bitmap("res/button.png");
 	// if (!button) cerr << "Error cargando button\n";
 	// ALLEGRO_COLOR color = al_color_cmyk(100,100,100, 100);
-	// menu.set_font("resources/font.ttf", 20);
+	// menu.set_font("res/font.ttf", 20);
 	// menu.add_button(50, 50, button, "holaa", color);
 	// menu.display(200, 200);
-	
+
 	//unitStructure
-	unitStructure uStr("resources/units", backbuffer, 50, al_map_rgb(200, 50, 50));
-	
+	unitStructure uStr("res/units", backbuffer, 50, al_map_rgb(200, 50, 50));
+
 	// unitManager
 	unitManager uMgr(&uStr);
 	uMgr.create_unit(0, 200, 200);
@@ -71,15 +71,15 @@ int main(int argc, char const *argv[])
 
 	// unit
 	// cerr << "creando unidad \n";
-	// ALLEGRO_BITMAP * bmp = al_load_bitmap("resources/Man50.png");
+	// ALLEGRO_BITMAP * bmp = al_load_bitmap("res/Man50.png");
 	// if (!bmp) cerr << "ERROR: creando bitmap man50\n";
 	// unit man(bmp, backbuffer, 50);
 	// cerr << "unidad creada \n";
 	// unit man = unitStr.create_unit(0);
 	// man.set_position(200,200);
 	// man.draw();
-	
-	
+
+
 	// eventos
 	ALLEGRO_EVENT_QUEUE * events = al_create_event_queue();
 	if (!events) cerr << "Error creando event queue\n";
@@ -87,20 +87,20 @@ int main(int argc, char const *argv[])
 	ALLEGRO_EVENT_SOURCE * mouse = al_get_mouse_event_source();
 	if (!mouse) cerr << "Error creando mouse source\n";
 	al_register_event_source(events, mouse);
-	
+
 	ALLEGRO_TIMER * timer = al_create_timer(1.f/FPS);
 	if (!timer) cerr << "Error creando timer\n";
 	al_register_event_source(events, al_get_display_event_source(display));
 	al_register_event_source(events, al_get_timer_event_source(timer));
 	al_start_timer(timer);
-	
+
 	if (!al_install_keyboard()) cerr << "Error instalando teclado\n";
 	ALLEGRO_EVENT_SOURCE * keyboard = al_get_keyboard_event_source();
 	al_register_event_source(events, keyboard);
 
-	ALLEGRO_BITMAP * cursor_map = al_load_bitmap("resources/cursor.png");
+	ALLEGRO_BITMAP * cursor_map = al_load_bitmap("res/cursor.png");
 	cursor raton(cursor_map, display);
-	
+
 	int x=0; int y=0;
 	bool shift = false;
 	bool click = false;
@@ -113,12 +113,12 @@ int main(int argc, char const *argv[])
 			case ALLEGRO_EVENT_TIMER:
 				uMgr.tick();
 				al_flip_display();
-				break; 
+				break;
 			case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
 				// std::cerr << ev.mouse.button;
 				if (ev.mouse.button == 1) {
 					uMgr.left_unclick(ev.mouse.x, ev.mouse.y, shift);
-					
+
 				}
 				if (ev.mouse.button == 2) {
 					uMgr.right_unclick(ev.mouse.x, ev.mouse.y, shift);
@@ -144,20 +144,20 @@ int main(int argc, char const *argv[])
 						shift = false;
 				}
 				break;
-			// case ALLEGRO_EVENT_MOUSE_AXES: 
+			// case ALLEGRO_EVENT_MOUSE_AXES:
 			// 	al_clear_to_color(al_map_rgb(0,0,0));
 			// 	al_draw_bitmap(img, ev.mouse.x, ev.mouse.y, 0);
 			// 	al_flip_display();
 			// 	break;
-				
-			case ALLEGRO_EVENT_DISPLAY_CLOSE:  
+
+			case ALLEGRO_EVENT_DISPLAY_CLOSE:
 				repeat = false;
 				break;
 		}
 	}
-	
+
 	// al_rest(5.0);
-	
+
 	al_destroy_event_queue(events);
 	al_destroy_display(display);
 	return 0;
