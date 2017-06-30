@@ -2,91 +2,104 @@
 #include <iostream>
 #include <set>
 #include <utility>
+#include <iterator>
+#include <queue>
+#include <math.h>
 
 using namespace std;
 
 
 
-unitManager::unitManager(unitStructure & uStr) : uStr(uStr) {}
+unitManager::unitManager(unitStructure * uStr) : uStr(uStr), units(uStr->get_max_population()), clicked(false) {}
 
 void unitManager::create_unit(int type, int x, int y) {
-	// unit u(uStr.get_type(type), uStr.get_backbuffer());
-	unit * u = uStr.create_unit(type);
+	// unit u(uStr->get_type(type), uStr->get_backbuffer());
+	unit * u = uStr->create_unit(type);
 	u->set_position(x,y);
 	units.insert(u);
-	
-	// auto ins = units.insert(std::make_pair<unit, std::list<unit*>::iterator>(u, selected.end())).first; // ins es un iterador al par agregado
-	
-	// units[u] = selected.end();;
-	
-	// cerr << "created unit\n";
-	
-	// ins->first.set_position(x,y);
-	// units.back().clear();
-	// units.back().draw();
-	
-	// selected.push_back(units.size()-1); // provisional: todas las unidades estan seleccionadas
-	// cerr << "selected\n";
-	
-	// selected.push_back(units.end()-1); // provisional: todas las unidades estan seleccionadas
 }
 
-void unitManager::left_unclick(int x, int y) {
+void unitManager::right_unclick(int x, int y, bool shift) {
 	for (auto it = selected.begin(); it != selected.end(); ++it) {
 		cerr << "moving\n";
 		(*it)->move(x,y);
-	}
-	
-	// for (auto it = units.begin(); it != units.end(); ++it) {
-	// 	cerr << it-> dst_x << " " << it->dst_y << endl;
-	// }
-	
+	}	
 }
 
-void unitManager::right_click(int x, int y) {
-	
+void unitManager::left_click(int x, int y) {
+	last_click_x = x;
+	last_click_y = y;
+	rect.set_values(y, y, x, x);
+	clicked = true;
 }
 
-void unitManager::right_unclick(int x, int y) {
-	selected.clear();
+void unitManager::left_unclick(int x, int y, bool shift) {
+	rect.clear();
+	clicked = false;
 	
-	
-	
-	// seleccion cabeza
-	for (auto it = units.begin(); it != units.end(); ++it) {
-		if ((*it)->is_clicked(x, y)) {
-			selected.insert((*it));
-			cerr << "selected\n";
-			return;
-		}
+	if (!shift) {
+		for (auto it = selected.begin(); it != selected.end(); ++it)
+			(*it)->unselect();
+		selected.clear();
 	}
 	
-	for (auto it = units.begin(); it != units.end(); ++it) {
-		if ((*it)->is_broadly_clicked(x, y)) {
-			selected.insert((*it));
-			cerr << "broadly selected\n";
-			return;
+	if ((last_click_x == x) && (last_click_y == y)) {
+		// seleccion cabeza
+		for (auto it = units.rbegin(); it != units.rend(); ++it) {
+			if ((*it)->is_clicked(x, y)) {
+				selected.insert((*it));
+				(*it)->select();
+				cerr << "selected\n";
+				return;
+			}
+		}
+		
+		for (auto it = units.rbegin(); it != units.rend(); ++it) {
+			if ((*it)->is_broadly_clicked(x, y)) {
+				selected.insert((*it));
+				(*it)->select();
+				cerr << "broadly selected\n";
+				return;
+			}
+		}
+	} else {
+		
+		// rectangle rect = rectangle(MIN(last_click_y, y), MAX(last_click_y, y), MIN(last_click_x, x), MAX(last_click_x, x));
+		// rect.print();
+		for (auto it = units.rbegin(); it != units.rend(); ++it) {
+			if ((*it)->intersects(rect)) {
+				selected.insert((*it));
+				(*it)->select();
+				cerr << "range selected\n";
+			}
 		}
 	}
-	
+}
+
+void unitManager::mouse_move(int x, int y) {
+	if (clicked) {
+		rect.set_values(MIN(last_click_y, y), MAX(last_click_y, y), MIN(last_click_x, x), MAX(last_click_x, x));
+	}
 }
 
 void unitManager::tick() {
-	
-	int i=0;
+	if (clicked) {
+		rect.clear();
+	}
+	// int i=0;
 	// for (int i=units.size()-1; i>=0; i--) {
 	// 	units[i].clear();
 	// }
 	for (auto it = units.rbegin(); it != units.rend(); ++it) {
-		// cerr << i++ << " clearing\n";
 		(*it)->clear();
 	}
-	i=0;
+	units.resort();
 	for (auto it = units.begin(); it != units.end(); ++it) {
-		// cerr << i++ << " drawing\n";
 		(*it)->draw();
 	}
-	
+	if (clicked) {
+		rect.draw();
+	}
 }
 
 // void unitManager::register_clickable(int x, int y, sprite * s) {

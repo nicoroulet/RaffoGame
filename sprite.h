@@ -1,8 +1,11 @@
 #pragma once
 
+#include "geometry.h"
+
 #include <vector>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
 
 
 class sprite {
@@ -16,8 +19,8 @@ class sprite {
 		int n;      // indice maximo de frame
 		int status; // status: un indice de estado, permite distintas secuencias graficas para un mismo objeto 
 		
-		int pre_x;
-		int pre_y;
+		int pos_x;
+		int pos_y;
 		ALLEGRO_BITMAP * bg; // background
 		
 		bool cleared;
@@ -30,7 +33,7 @@ class sprite {
 		void create_sprite(ALLEGRO_BITMAP* bitmap, ALLEGRO_BITMAP * backbuffer, int size);
 		void delete_sprite();
 		// dibujar siguiente fotograma en pos x, y
-		void draw(int x, int y); 
+		void draw(int x, int y, bool selected); 
 		
 		// borrar ultimo fotograma
 		// Importante: llamar a clear de varios sprites en el orden inverso a draw
@@ -44,5 +47,6 @@ class sprite {
 		ALLEGRO_COLOR get_pixel(int x, int y);
 		
 		int get_size();
+		rectangle get_rectangle();
 		
 };

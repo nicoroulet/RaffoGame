@@ -7,6 +7,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_primitives.h>
 
 #include "sprite.h"
 #include "menu.h"
@@ -32,6 +33,7 @@ int main(int argc, char const *argv[])
 	// if (!al_init_acodec_addon()) cerr << "Inicializando codecs\n";
 	al_init_font_addon();
 	if (!al_init_ttf_addon()) cerr << "Error inicializando ttf\n";
+	if (!al_init_primitives_addon()) cerr << "Error iniciando primitivas\n";
 
 
 	al_set_new_display_option(ALLEGRO_SINGLE_BUFFER, 1, ALLEGRO_SUGGEST);
@@ -41,7 +43,7 @@ int main(int argc, char const *argv[])
 	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 	ALLEGRO_DISPLAY * display = al_create_display(5000, 5000);
 	ALLEGRO_BITMAP * backbuffer = al_get_backbuffer(display);
-	al_clear_to_color(al_map_rgb(0,100,0));
+	al_clear_to_color(al_map_rgb(0,80,0));
 	//audio
 	// ALLEGRO_SAMPLE * audio = al_load_sample("audio.wav");
 	// if (!audio) cerr << "Error cargando audio\n";
@@ -59,13 +61,13 @@ int main(int argc, char const *argv[])
 	// menu.display(200, 200);
 	
 	//unitStructure
-	unitStructure uStr("resources/units", backbuffer, 50);
+	unitStructure uStr("resources/units", backbuffer, 50, al_map_rgb(200, 50, 50));
 	
 	// unitManager
-	unitManager uMgr(uStr);
+	unitManager uMgr(&uStr);
 	uMgr.create_unit(0, 200, 200);
 	uMgr.create_unit(0, 800, 400);
-	uMgr.create_unit(0, 900, 100);
+	uMgr.create_unit(1, 900, 100);
 
 	// unit
 	// cerr << "creando unidad \n";
@@ -91,11 +93,17 @@ int main(int argc, char const *argv[])
 	al_register_event_source(events, al_get_display_event_source(display));
 	al_register_event_source(events, al_get_timer_event_source(timer));
 	al_start_timer(timer);
+	
+	if (!al_install_keyboard()) cerr << "Error instalando teclado\n";
+	ALLEGRO_EVENT_SOURCE * keyboard = al_get_keyboard_event_source();
+	al_register_event_source(events, keyboard);
 
-	// ALLEGRO_BITMAP * cursor_map = al_load_bitmap("resources/cursor.png");
-	// cursor raton(cursor_map, display);
+	ALLEGRO_BITMAP * cursor_map = al_load_bitmap("resources/cursor.png");
+	cursor raton(cursor_map, display);
 	
 	int x=0; int y=0;
+	bool shift = false;
+	bool click = false;
 	bool repeat = true;
 	while(repeat) {
 		ALLEGRO_EVENT ev;
@@ -109,13 +117,33 @@ int main(int argc, char const *argv[])
 			case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
 				// std::cerr << ev.mouse.button;
 				if (ev.mouse.button == 1) {
-					uMgr.right_unclick(ev.mouse.x, ev.mouse.y);
+					uMgr.left_unclick(ev.mouse.x, ev.mouse.y, shift);
+					
 				}
 				if (ev.mouse.button == 2) {
-					uMgr.left_unclick(ev.mouse.x, ev.mouse.y);
+					uMgr.right_unclick(ev.mouse.x, ev.mouse.y, shift);
 				}
 				break;
-			
+			case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+				if (ev.mouse.button == 1) {
+					uMgr.left_click(ev.mouse.x, ev.mouse.y);
+				}
+				break;
+			case ALLEGRO_EVENT_MOUSE_AXES:
+				uMgr.mouse_move(ev.mouse.x, ev.mouse.y);
+				break;
+			case ALLEGRO_EVENT_KEY_DOWN:
+				switch (ev.keyboard.keycode) {
+					case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
+						shift = true;
+				}
+				break;
+			case ALLEGRO_EVENT_KEY_UP:
+				switch (ev.keyboard.keycode) {
+					case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
+						shift = false;
+				}
+				break;
 			// case ALLEGRO_EVENT_MOUSE_AXES: 
 			// 	al_clear_to_color(al_map_rgb(0,0,0));
 			// 	al_draw_bitmap(img, ev.mouse.x, ev.mouse.y, 0);

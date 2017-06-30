@@ -1,5 +1,6 @@
 #pragma once
 #include "sprite.h"
+#include "geometry.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
@@ -37,6 +38,7 @@ class unit {
 		int pos_y;
 		int dst_x;
 		int dst_y;
+		bool selected;
 		
 		
 		unitType * type;
@@ -50,10 +52,13 @@ class unit {
 		void move(int x, int y);
 		void clear();
 		void draw();
+		void select();
+		void unselect();
 		void set_position(int x, int y);
 		int y();
 		int x();
 		bool operator<(unit & other);
 		bool is_clicked(int x, int y); // la unidad esta en la posicion x, y
 		bool is_broadly_clicked(int x, int y);
+		bool intersects(rectangle & rect);
 };

@@ -5,12 +5,13 @@
 #include <allegro5/allegro_image.h>
 #include "unit.h"
 #include "static_queue.h"
+// #include <queue>
 
 // Tiene los datos basicos de cada tipo de unidad para crearlas mas facilmente
 
 class unitStructure {
 	public:
-		unitStructure(const char* dir, ALLEGRO_BITMAP * backbuffer, int max_pop);
+		unitStructure(const char* dir, ALLEGRO_BITMAP * backbuffer, int max_pop, ALLEGRO_COLOR color);
 		~unitStructure();
 		unitType * get_type(int type);
 		unit * create_unit(int type);
@@ -18,6 +19,10 @@ class unitStructure {
 		ALLEGRO_BITMAP * get_backbuffer();
 		
 		int get_max_unit_framesize();
+		int get_max_population();
+		
+		int get_width();
+		int get_height();
 	private:
 		
 		std::vector<unitType *> types;

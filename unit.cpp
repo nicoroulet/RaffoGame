@@ -12,6 +12,8 @@ void unit::create_unit(unitType * t, ALLEGRO_BITMAP * backbuffer) {
 	std::cerr << "creating unit: " << t->name;
 	sprt.create_sprite(t->bmp, backbuffer, t->framesize);
 	type = t;
+	selected = false;
+	std::cerr << "... OK\n";
 }
 
 void unit::delete_unit() {
@@ -49,15 +51,20 @@ void unit::clear() {
 void unit::draw() {
 	float d_x = dst_x - pos_x;
 	float d_y = dst_y - pos_y;
-	// if (d_x || d_y) {
-		float dist = fastsqrt(d_x * d_x + d_y * d_y);
-		pos_x += d_x * ((type->speed < dist)? type->speed : dist) / dist;
-		pos_y += d_y * ((type->speed < dist)? type->speed : dist) / dist;
-		sprt.draw(pos_x, pos_y);
-		
-		// std::cerr << pos_x << " " << pos_y << "\n";
-	// }
 	
+	float dist = fastsqrt(d_x * d_x + d_y * d_y);
+	pos_x += d_x * ((type->speed < dist)? type->speed : dist) / dist;
+	pos_y += d_y * ((type->speed < dist)? type->speed : dist) / dist;
+	sprt.draw(pos_x, pos_y, selected);
+	
+}
+
+void unit::select() {
+	selected = true;
+}
+
+void unit::unselect() {
+	selected = false;
 }
 
 void unit::set_position(int x, int y) {
@@ -78,7 +85,7 @@ int unit::x() {
 }
 
 bool unit::operator<(unit & other) {
-	return pos_y < other.pos_y;
+	return pos_y + sprt.get_size() < other.pos_y + other.sprt.get_size();
 }
 
 bool unit::is_clicked(int x, int y) {
@@ -89,3 +96,7 @@ bool unit::is_broadly_clicked(int x, int y) {
 	return sprt.is_broadly_clicked(x, y);
 }
 
+bool unit::intersects(rectangle & rect) {
+	rectangle rect2 = sprt.get_rectangle();
+	return rect.intersect(rect2).is_valid();
+}
