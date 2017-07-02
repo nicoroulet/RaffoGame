@@ -14,7 +14,7 @@ unitManager::unitManager(unitStructure * uStr) : uStr(uStr), units(uStr->get_max
 
 void unitManager::create_unit(int type, int x, int y) {
 	// unit u(uStr->get_type(type), uStr->get_backbuffer());
-	unit * u = uStr->create_unit(type);
+	Unit * u = uStr->create_unit(type);
 	u->set_position(x,y);
 	units.insert(u);
 }
@@ -23,7 +23,7 @@ void unitManager::right_unclick(int x, int y, bool shift) {
 	for (auto it = selected.begin(); it != selected.end(); ++it) {
 		cerr << "moving\n";
 		(*it)->move(x,y);
-	}	
+	}
 }
 
 void unitManager::left_click(int x, int y) {
@@ -36,13 +36,13 @@ void unitManager::left_click(int x, int y) {
 void unitManager::left_unclick(int x, int y, bool shift) {
 	rect.clear();
 	clicked = false;
-	
+
 	if (!shift) {
 		for (auto it = selected.begin(); it != selected.end(); ++it)
 			(*it)->unselect();
 		selected.clear();
 	}
-	
+
 	if ((last_click_x == x) && (last_click_y == y)) {
 		// seleccion cabeza
 		for (auto it = units.rbegin(); it != units.rend(); ++it) {
@@ -53,7 +53,7 @@ void unitManager::left_unclick(int x, int y, bool shift) {
 				return;
 			}
 		}
-		
+
 		for (auto it = units.rbegin(); it != units.rend(); ++it) {
 			if ((*it)->is_broadly_clicked(x, y)) {
 				selected.insert((*it));
@@ -63,7 +63,7 @@ void unitManager::left_unclick(int x, int y, bool shift) {
 			}
 		}
 	} else {
-		
+
 		// rectangle rect = rectangle(MIN(last_click_y, y), MAX(last_click_y, y), MIN(last_click_x, x), MAX(last_click_x, x));
 		// rect.print();
 		for (auto it = units.rbegin(); it != units.rend(); ++it) {

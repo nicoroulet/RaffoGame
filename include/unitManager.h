@@ -10,26 +10,26 @@
 #include <set>
 #include <list>
 
-// Controla las unidades. 
+// Controla las unidades.
 // Permite crear unidades y maneja clicks de mouse y ticks de timer.
 
 class unitManager {
 	private:
 		struct compare {
-			bool operator() (unit* u1, unit* u2) const {return *u1 < *u2;}
+			bool operator() (Unit* u1, Unit* u2) const {return *u1 < *u2;}
 		};
-		sorted_array<unit*, compare> units;
-		// std::set<unit*, compare> units;
-		std::set<unit*> selected;
+		sorted_array<Unit*, compare> units;
+		// std::set<Unit*, compare> units;
+		std::set<Unit*> selected;
 		unitStructure * uStr;
-		
+
 		int display_width;
 		int display_height;
 		int last_click_x;
 		int last_click_y;
 		bool clicked;
 		drawable_rectangle rect;
-		
+
 	public:
 		unitManager(unitStructure * uStr);
 		void create_unit(int type, int x, int y);

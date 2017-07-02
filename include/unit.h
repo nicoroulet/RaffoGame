@@ -6,49 +6,32 @@
 
 #define MAX_NAME_LENGTH 16
 
-struct unitType {
-	
+struct UnitType {
+
 	char name[MAX_NAME_LENGTH];
 	float speed;
-	
+
 	ALLEGRO_BITMAP * bmp;
 	int framesize;
 } __attribute__ ((__packed__)) ;
 
 enum direction {
-	down,
-	down_left,
-	left,
-	up_left,
-	up,
-	up_right,
-	right,
-	down_right
+	DOWN,
+	DOWN_LEFT,
+	LEFT,
+	UP_LEFT,
+	UP,
+	UP_RIGHT,
+	RIGHT,
+	DOWN_RIGHT
 };
 
-class unit {
-	// virtual int hp; 	// vida
-	// virtual int attack; // ataque
-	// virtual int melee;	// arm. de contacto
-	// virtual int pierce; // arm. distancia
-	
-	private:
-		sprite sprt;
-		int pos_x;
-		int pos_y;
-		int dst_x;
-		int dst_y;
-		bool selected;
-		
-		
-		unitType * type;
-		unit(unit & u);
-		
+class Unit {
 	public:
-		unit();
-		void create_unit(unitType * t, ALLEGRO_BITMAP * backbuffer);
+		Unit();
+		void create_unit(UnitType * t, ALLEGRO_BITMAP * backbuffer);
 		void delete_unit();
-		
+
 		void move(int x, int y);
 		void clear();
 		void draw();
@@ -57,8 +40,20 @@ class unit {
 		void set_position(int x, int y);
 		int y();
 		int x();
-		bool operator<(unit & other);
-		bool is_clicked(int x, int y); // la unidad esta en la posicion x, y
-		bool is_broadly_clicked(int x, int y);
+		bool operator<(Unit & other);
+		bool is_clicked(int x, int y); 			// check whether the unit sprite is non-transparent in pos x, y
+		bool is_broadly_clicked(int x, int y);	// check whether the unit sprite is in pos x, y
 		bool intersects(rectangle & rect);
+
+	protected:
+		static float speed;
+		sprite sprt;
+		int pos_x;
+		int pos_y;
+		int dst_x;
+		int dst_y;
+		bool selected;
+
+		UnitType * type;
+		Unit(Unit & u);
 };

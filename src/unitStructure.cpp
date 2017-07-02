@@ -7,7 +7,7 @@
 
 using namespace std;
 
-unitStructure::unitStructure(const char* dir, ALLEGRO_BITMAP * backbuffer, int max_pop, ALLEGRO_COLOR color) : 
+unitStructure::unitStructure(const char* dir, ALLEGRO_BITMAP * backbuffer, int max_pop, ALLEGRO_COLOR color) :
 	backbuffer(backbuffer),
 	max_population(max_pop),
 	current_population(0),
@@ -15,11 +15,11 @@ unitStructure::unitStructure(const char* dir, ALLEGRO_BITMAP * backbuffer, int m
 	hint_index(0),
 	max_unit_framesize(0)
 {
-	units = new unit[max_pop];
+	units = new Unit[max_pop];
 	for (int i = 0; i < max_pop; ++i) {
-		units[i] = unit();
+		units[i] = Unit();
 	}
-	
+
 	char buf[80];
 	// stringstream buf;
 	// buf << dir << "/units.dat";
@@ -30,13 +30,13 @@ unitStructure::unitStructure(const char* dir, ALLEGRO_BITMAP * backbuffer, int m
 	while(fgets(buf, MAX_NAME_LENGTH - 1, units_file) != NULL) {
 	// string name;
 	// while (getline(units_file, name)) {
-		unitType * u = new unitType;
+		UnitType * u = new UnitType;
 		// name.copy(u->name, MAX_NAME_LENGTH);
 		// units_file.get(u->name, MAX_NAME_LENGTH);
 		// cerr << "name: " << u->name << endl;
 		strcpy(u->name, buf); // capaz falte \0 al final
 		// buf.str(string());
-		
+
 		sprintf(buf, "%s/", dir);
 		// string file;
 		// units_file >> file;
@@ -81,18 +81,18 @@ unitStructure::unitStructure(const char* dir, ALLEGRO_BITMAP * backbuffer, int m
 }
 
 
-unitType * unitStructure::get_type(int type) {
+UnitType * unitStructure::get_type(int type) {
 	return types[type];
 }
 
 // busca una posicion libre en el vector de unidades, crea una unidad ahi y devuelve el puntero
 // la posicion libre la busca en la cola de unidades suprimidas, de no haber, usa una posicion nueva con hint_index
-unit * unitStructure::create_unit(int type) {
+Unit * unitStructure::create_unit(int type) {
 	// si esta en el maximo
 	if (current_population == max_population) return NULL;
 	// busco una unidad libre
 	int index;
-	if (deleted_queue.empty()) 
+	if (deleted_queue.empty())
 		index = hint_index++;
 	else
 		index = deleted_queue.pop();
@@ -102,7 +102,7 @@ unit * unitStructure::create_unit(int type) {
 }
 
 
-void unitStructure::delete_unit(unit * u) {
+void unitStructure::delete_unit(Unit * u) {
 	u->delete_unit();
 	deleted_queue.push((int)(u - &units[0])); // OJO, capaz se rompe
 }

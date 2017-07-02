@@ -3,12 +3,12 @@
 
 #include <iostream>
 
-unit::unit() :
+Unit::Unit() :
 	sprt(), type(NULL) {}
-	
-// unit::unit(unit & u) : sprt(u.sprt), type(u.type), pos_x(u.pos_x), pos_y(u.pos_y), dst_x(u.dst_x), dst_y(u.dst_y) {}
 
-void unit::create_unit(unitType * t, ALLEGRO_BITMAP * backbuffer) {
+// Unit::Unit(Unit & u) : sprt(u.sprt), type(u.type), pos_x(u.pos_x), pos_y(u.pos_y), dst_x(u.dst_x), dst_y(u.dst_y) {}
+
+void Unit::create_unit(UnitType * t, ALLEGRO_BITMAP * backbuffer) {
 	std::cerr << "creating unit: " << t->name;
 	sprt.create_sprite(t->bmp, backbuffer, t->framesize);
 	type = t;
@@ -16,11 +16,12 @@ void unit::create_unit(unitType * t, ALLEGRO_BITMAP * backbuffer) {
 	std::cerr << "... OK\n";
 }
 
-void unit::delete_unit() {
+void Unit::delete_unit() {
 	sprt.delete_sprite();
 }
 
-void unit::move(int x, int y) {
+void Unit::move(int x, int y) {
+	// TODO: optimize this function
 	dst_x = x - sprt.get_size()/2;
 	dst_y = y - sprt.get_size()/2;
 	float d_x = dst_x - pos_x;
@@ -29,45 +30,45 @@ void unit::move(int x, int y) {
 	if (tang < 0) tang = - tang;
 	direction status;
 	if (tang < 0.41421f) {
-		if (d_x > 0) status = left;
-		else status = right;
+		if (d_x > 0) status = LEFT;
+		else status = RIGHT;
 	}
 	else if (tang > 2.41421f) {
-		if (d_y < 0) status = up;
-		else status = down;
+		if (d_y < 0) status = UP;
+		else status = DOWN;
 	}
-	else if (d_x > 0 && d_y < 0) status = up_left;
-	else if (d_x > 0 && d_y > 0) status = down_left;
-	else if (d_x < 0 && d_y < 0) status = up_right;
-	else status = down_right;
+	else if (d_x > 0 && d_y < 0) status = UP_LEFT;
+	else if (d_x > 0 && d_y > 0) status = DOWN_LEFT;
+	else if (d_x < 0 && d_y < 0) status = UP_RIGHT;
+	else status = DOWN_RIGHT;
 	sprt.change_status(status);
 }
 
-void unit::clear() {
+void Unit::clear() {
 	// if (dst_x - pos_x || dst_y - pos_y)
 		sprt.clear();
 }
 
-void unit::draw() {
+void Unit::draw() {
 	float d_x = dst_x - pos_x;
 	float d_y = dst_y - pos_y;
-	
+
 	float dist = fastsqrt(d_x * d_x + d_y * d_y);
 	pos_x += d_x * ((type->speed < dist)? type->speed : dist) / dist;
 	pos_y += d_y * ((type->speed < dist)? type->speed : dist) / dist;
 	sprt.draw(pos_x, pos_y, selected);
-	
+
 }
 
-void unit::select() {
+void Unit::select() {
 	selected = true;
 }
 
-void unit::unselect() {
+void Unit::unselect() {
 	selected = false;
 }
 
-void unit::set_position(int x, int y) {
+void Unit::set_position(int x, int y) {
 	pos_x = x-1;
 	pos_y = y-1;
 	dst_x = x;
@@ -76,27 +77,27 @@ void unit::set_position(int x, int y) {
 	// sprt.draw(pos_x, pos_y);
 }
 
-int unit::y() {
+int Unit::y() {
 	return pos_y;
 }
 
-int unit::x() {
+int Unit::x() {
 	return pos_x;
 }
 
-bool unit::operator<(unit & other) {
+bool Unit::operator<(Unit & other) {
 	return pos_y + sprt.get_size() < other.pos_y + other.sprt.get_size();
 }
 
-bool unit::is_clicked(int x, int y) {
+bool Unit::is_clicked(int x, int y) {
 	return sprt.is_clicked(x, y);
 }
 
-bool unit::is_broadly_clicked(int x, int y) { 
+bool Unit::is_broadly_clicked(int x, int y) {
 	return sprt.is_broadly_clicked(x, y);
 }
 
-bool unit::intersects(rectangle & rect) {
+bool Unit::intersects(rectangle & rect) {
 	rectangle rect2 = sprt.get_rectangle();
 	return rect.intersect(rect2).is_valid();
 }
