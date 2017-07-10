@@ -1,3 +1,7 @@
+/*
+DEPRECATED
+*/
+
 #pragma once
 
 #include <vector>

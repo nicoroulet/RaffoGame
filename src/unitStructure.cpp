@@ -1,3 +1,6 @@
+/*
+DEPRECATED
+*/
 #include "unitStructure.h"
 #include <iostream>
 #include <fstream>
