@@ -15,7 +15,7 @@ class map {
 		// tile_file es un .png que contiene una fila con todos los tiles
 		map(const char * map_file, const char * tile_file);
 		void display(int x, int y);
-		void register_clickable(int x, int y, sprite * s);
+		void register_clickable(int x, int y, Sprite * s);
 
 		int get_offset_x();
 		int get_offset_y();

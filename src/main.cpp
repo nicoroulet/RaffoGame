@@ -25,15 +25,22 @@ const int FPS = 10;
 // } stat;
 
 using namespace std;
+
+void initialize_units() {
+	std::cerr << "initializing units";
+	Pirate::initialize();
+}
+
 int main(int argc, char const *argv[])
 {
-	if (!al_init()) cerr << "Error inicializando allegro\n";
-	if (!al_init_image_addon()) cerr << "Error inicializando imagenes\n";
+	cerr << "al_init\n";
+	if (!al_init()) cerr << "Error initializing allegro\n";
+	if (!al_init_image_addon()) cerr << "Error initializing images\n";
 	// if (!al_install_audio()) cerr << "Error instalando audio\n";
 	// if (!al_init_acodec_addon()) cerr << "Inicializando codecs\n";
 	al_init_font_addon();
-	if (!al_init_ttf_addon()) cerr << "Error inicializando ttf\n";
-	if (!al_init_primitives_addon()) cerr << "Error iniciando primitivas\n";
+	if (!al_init_ttf_addon()) cerr << "Error initializing ttf\n";
+	if (!al_init_primitives_addon()) cerr << "Error initializing primitives\n";
 
 
 	al_set_new_display_option(ALLEGRO_SINGLE_BUFFER, 1, ALLEGRO_SUGGEST);
@@ -43,7 +50,8 @@ int main(int argc, char const *argv[])
 	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 	ALLEGRO_DISPLAY * display = al_create_display(5000, 5000);
 	ALLEGRO_BITMAP * backbuffer = al_get_backbuffer(display);
-	al_clear_to_color(al_map_rgb(0,80,0));
+	// al_reset_clipping_rectangle();
+	// al_clear_to_color(al_map_rgb(0,80,0));
 	//audio
 	// ALLEGRO_SAMPLE * audio = al_load_sample("audio.wav");
 	// if (!audio) cerr << "Error cargando audio\n";
@@ -60,14 +68,18 @@ int main(int argc, char const *argv[])
 	// menu.add_button(50, 50, button, "holaa", color);
 	// menu.display(200, 200);
 
+	// initialization
+	Sprite::initialize(backbuffer);
+	initialize_units();
+
 	//unitStructure
-	unitStructure uStr("res/units", backbuffer, 50, al_map_rgb(200, 50, 50));
+	// unitStructure uStr("res/units", backbuffer, 50, al_map_rgb(200, 50, 50));
 
 	// unitManager
-	unitManager uMgr(&uStr);
-	uMgr.create_unit(0, 200, 200);
-	uMgr.create_unit(0, 800, 400);
-	uMgr.create_unit(1, 900, 100);
+	unitManager uMgr(/*&uStr, */50);
+	uMgr.create_pirate(200, 200);
+	// uMgr.create_unit(0, 800, 400);
+	// uMgr.create_unit(1, 900, 100);
 
 	// unit
 	// cerr << "creando unidad \n";

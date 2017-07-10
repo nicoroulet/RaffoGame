@@ -15,9 +15,9 @@ unitStructure::unitStructure(const char* dir, ALLEGRO_BITMAP * backbuffer, int m
 	hint_index(0),
 	max_unit_framesize(0)
 {
-	units = new Unit[max_pop];
+	units = new Pirate[max_pop];
 	for (int i = 0; i < max_pop; ++i) {
-		units[i] = Unit();
+		units[i] = Pirate();
 	}
 
 	char buf[80];
@@ -97,13 +97,13 @@ Unit * unitStructure::create_unit(int type) {
 	else
 		index = deleted_queue.pop();
 	std::cerr << "index: " << index << std::endl;
-	units[index].create_unit(types[type], backbuffer);
+	// units[index].create_unit(types[type], backbuffer);
 	return &units[index];
 }
 
 
 void unitStructure::delete_unit(Unit * u) {
-	u->delete_unit();
+	// u->delete_unit();
 	deleted_queue.push((int)(u - &units[0])); // OJO, capaz se rompe
 }
 

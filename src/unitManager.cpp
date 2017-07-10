@@ -10,13 +10,17 @@ using namespace std;
 
 
 
-unitManager::unitManager(unitStructure * uStr) : uStr(uStr), units(uStr->get_max_population()), clicked(false) {}
+unitManager::unitManager(/*unitStructure * uStr, */ int maxPop) :
+	// uStr(uStr),
+	units(maxPop/*uStr->get_max_population()*/),
+	clicked(false) {}
 
-void unitManager::create_unit(int type, int x, int y) {
+void unitManager::create_pirate(int x, int y) {
 	// unit u(uStr->get_type(type), uStr->get_backbuffer());
-	Unit * u = uStr->create_unit(type);
-	u->set_position(x,y);
-	units.insert(u);
+	// TODO: delete this new or change the way of creating units
+	Pirate * p = new Pirate();
+	p->set_position(x,y);
+	units.insert(p);
 }
 
 void unitManager::right_unclick(int x, int y, bool shift) {

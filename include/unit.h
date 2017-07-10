@@ -15,45 +15,58 @@ struct UnitType {
 	int framesize;
 } __attribute__ ((__packed__)) ;
 
-enum direction {
-	DOWN,
-	DOWN_LEFT,
-	LEFT,
-	UP_LEFT,
-	UP,
-	UP_RIGHT,
-	RIGHT,
-	DOWN_RIGHT
+class Unit {
+public:
+	// Rule of four (and a half):
+	// Copy constructor. Not sure if it should be eliminated or just not used.
+	Unit(Unit &u) = delete;
+	// Move constructor
+	// Unit(Unit &&u);
+	// Assignment operator
+	// Unit& operator=(Unit u) = default;
+	// Swap
+	// friend void swap(Unit &u1, Unit &u2);
+
+	void create_unit(UnitType * t, ALLEGRO_BITMAP * backbuffer);
+	void delete_unit();
+
+	void move(int x, int y);
+	void clear();
+	void draw();
+	void select();
+	void unselect();
+	void set_position(int x, int y);
+	int y();
+	int x();
+	bool operator<(Unit & other);
+	bool is_clicked(int x, int y); 			// check whether the unit sprite is non-transparent in pos x, y
+	bool is_broadly_clicked(int x, int y);	// check whether the unit sprite is in pos x, y
+	bool intersects(rectangle & rect);
+
+protected:
+	// Construct a Unit, getting the sprite
+	Unit(Sprite *sprite);
+
+	virtual ALLEGRO_BITMAP *unit_type_bitmap() = 0;
+	static float speed;
+	Sprite *sprite;
+	int pos_x;
+	int pos_y;
+	int dst_x;
+	int dst_y;
+	bool selected;
+
+	UnitType * type;
 };
 
-class Unit {
-	public:
-		Unit();
-		void create_unit(UnitType * t, ALLEGRO_BITMAP * backbuffer);
-		void delete_unit();
-
-		void move(int x, int y);
-		void clear();
-		void draw();
-		void select();
-		void unselect();
-		void set_position(int x, int y);
-		int y();
-		int x();
-		bool operator<(Unit & other);
-		bool is_clicked(int x, int y); 			// check whether the unit sprite is non-transparent in pos x, y
-		bool is_broadly_clicked(int x, int y);	// check whether the unit sprite is in pos x, y
-		bool intersects(rectangle & rect);
-
-	protected:
-		static float speed;
-		sprite sprt;
-		int pos_x;
-		int pos_y;
-		int dst_x;
-		int dst_y;
-		bool selected;
-
-		UnitType * type;
-		Unit(Unit & u);
+class Pirate : public Unit {
+public:
+	Pirate();
+	// sets static values
+	static void initialize();
+protected:
+	// stores the bitmap for the class' graphics
+	static ALLEGRO_BITMAP *unit_type_bitmap_ptr;
+	// retrieve the bitmap
+	virtual ALLEGRO_BITMAP *unit_type_bitmap();
 };
