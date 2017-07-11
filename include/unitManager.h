@@ -10,8 +10,8 @@
 #include <set>
 #include <list>
 
-// Controla las unidades.
-// Permite crear unidades y maneja clicks de mouse y ticks de timer.
+// Controls units
+// Handles creation, selection, movement and clock ticks
 
 class unitManager {
 private:
@@ -19,9 +19,7 @@ private:
 		bool operator() (Unit* u1, Unit* u2) const {return *u1 < *u2;}
 	};
 	sorted_array<Unit*, compare> units;
-	// std::set<Unit*, compare> units;
 	std::set<Unit*> selected;
-	// unitStructure * uStr;
 
 	int display_width;
 	int display_height;
@@ -31,7 +29,7 @@ private:
 	drawable_rectangle rect;
 
 public:
-	unitManager(/*unitStructure * uStr, */int maxPop);
+	unitManager(int maxPop);
 	void create_pirate(int x, int y);
 	void right_unclick(int x, int y, bool shift);
 	void left_click(int x, int y);

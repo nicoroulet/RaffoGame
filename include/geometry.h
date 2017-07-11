@@ -14,7 +14,7 @@ protected:
 	int down;
 	int left;
 	int right;
-	
+
 public:
 	rectangle();
 	rectangle(int u, int d, int l, int r);
@@ -35,5 +35,5 @@ public:
 	void set_values(int u, int d, int l, int r);
 	void draw();
 	void clear();
-		
+
 };

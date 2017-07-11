@@ -25,7 +25,7 @@ enum Status {
 	WALK,
 	ATTACK,
 	DIE,
-	RECEIVE_HIT,
+	HIT,
 	STATUS_COUNT // sorry about this too
 };
 
@@ -35,6 +35,7 @@ enum Status {
 // on a bitmap for the 8 directions and the different status (move, attack,
 // stand, die, receive hit)
 // Note: implementing only one concrete class for now
+// TODO: consider removing this class
 class SpriteLayoutInterpreter {
 private:
 	// horizontal offsets, indexed by status: idle, walk, attack, die, hit
@@ -67,10 +68,7 @@ class Sprite {
 public:
 	Sprite(/*ALLEGRO_BITMAP* bitmap*//*, int framesize*/);
 	~Sprite();
-	// Sprite(const Sprite & s) = delete;
-
-	// void create_sprite(ALLEGRO_BITMAP* bitmap, ALLEGRO_BITMAP * backbuffer, int size);
-	// void delete_sprite();
+	Sprite(const Sprite & s) = delete;
 
 	// Draw next frame in position x, y.
 	// Adds a selection animation if selected = true
@@ -104,13 +102,12 @@ protected:
 
 	SpriteLayoutInterpreter layout_interpreter;
 
-	// Bitmap with the animation to be displayed
-	// ALLEGRO_BITMAP* bmp;
-
-	/*inline*/ virtual ALLEGRO_BITMAP *bitmap_of(Status status) {
+	// TODO: these should be abstract methods, not dummy
+	virtual ALLEGRO_BITMAP *bitmap_of(Status status) {
 		std::cerr << "called dummy method bitmap_of\n";
-		return nullptr; }
-	/*inline*/ virtual int n_frames_of(Status status) {
+		return nullptr;
+	}
+	virtual int n_frames_of(Status status) {
 		std::cerr << "called dummy method n_frames_of\n";
 		return 0;
 	}
@@ -121,13 +118,13 @@ protected:
 	int framesize;
 
 	int frame;  // current frame number
-	// int n;      // maximum frame index
 	Status status;
 	Direction direction;
 
 	int pos_x;
 	int pos_y;
-	ALLEGRO_BITMAP * bg; // background
+	// When drawn, the background is stored here for next call to clear
+	ALLEGRO_BITMAP * bg;
 
 	bool cleared;
 };

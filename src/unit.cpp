@@ -3,60 +3,10 @@
 
 #include <iostream>
 
-
-#include <sys/stat.h>
-#include <string>
-#include <fstream>
-
-inline bool exists (const std::string& name) {
-    std::ifstream f(name.c_str());
-    return f.good();
-}
-
-
-// inline bool exists (const std::string& name) {
-//   struct stat buffer;
-//   return (stat (name.c_str(), &buffer) == 0);
-// }
-
 Unit::Unit(Sprite *sprite) :
 	selected(false),
 	sprite(sprite)
 	{}
-
-// Unit::Unit(Unit &u) {
-// 	std::cerr << "Unit copy constructor called!\n";
-// }
-
-// Unit::Unit(Unit &&u) :
-// 	sprite(std::move(u.sprite)),
-// 	pos_x(u.pos_x),
-// 	pos_y(u.pos_y),
-// 	dst_x(u.dst_x),
-// 	dst_y(u.dst_y),
-// 	selected(u.selected)
-// 	{}
-
-// Unit& operator=(Unit u) {
-// 	swap(*this, u);
-// 	return *this;
-// }
-
-// void swap(Unit &u1, Unit &u2) {
-
-// }
-
-// void Unit::create_unit(UnitType * t, ALLEGRO_BITMAP * backbuffer) {
-// 	std::cerr << "creating unit: " << t->name;
-// 	sprite.create_sprite(t->bmp, backbuffer, t->framesize);
-// 	type = t;
-// 	selected = false;
-// 	std::cerr << "... OK\n";
-// }
-
-// void Unit::delete_unit() {
-// 	sprite.delete_sprite();
-// }
 
 void Unit::move(int x, int y) {
 	// TODO: optimize this function
@@ -84,8 +34,7 @@ void Unit::move(int x, int y) {
 }
 
 void Unit::clear() {
-	// if (dst_x - pos_x || dst_y - pos_y)
-		sprite->clear();
+	sprite->clear();
 }
 
 void Unit::draw() {
@@ -93,13 +42,13 @@ void Unit::draw() {
 	float d_y = dst_y - pos_y;
 
 	float dist = fastsqrt(d_x * d_x + d_y * d_y);
-	pos_x += d_x * ((/*type->*/speed < dist)? /*type->*/speed : dist) / dist;
-	pos_y += d_y * ((/*type->*/speed < dist)? /*type->*/speed : dist) / dist;
+	// TODO: clean this code
+	pos_x += d_x * ((speed < dist)? speed : dist) / dist;
+	pos_y += d_y * ((speed < dist)? speed : dist) / dist;
 	if (speed >= dist) {
 		sprite->change_status(IDLE);
 	}
 	sprite->draw(pos_x, pos_y, selected);
-
 }
 
 void Unit::select() {
@@ -116,7 +65,6 @@ void Unit::set_position(int x, int y) {
 	dst_x = x;
 	dst_y = y;
 	draw();
-	// sprite->draw(pos_x, pos_y);
 }
 
 int Unit::y() {
@@ -154,12 +102,7 @@ ALLEGRO_BITMAP *Pirate::unit_type_bitmap_ptr = NULL;
 
 void Pirate::initialize() {
 	if (!unit_type_bitmap_ptr) {
-		if (exists("/home/nico/Documents/programacion/RaffoAge/res/units/Pirate2.png")) {
-			std::cout << "\n exists \n";
-		} else {
-			std::cout << "\n not exists \n";
-		}
-		al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
+		// al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
 		ALLEGRO_BITMAP *bmp = al_load_bitmap("res/units/Pirate2.png");
 		unit_type_bitmap_ptr = bmp;
 		std::cerr << "initialized pirate bitmap to " << bmp;

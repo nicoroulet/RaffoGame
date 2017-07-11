@@ -17,15 +17,7 @@ struct UnitType {
 
 class Unit {
 public:
-	// Rule of four (and a half):
-	// Copy constructor. Not sure if it should be eliminated or just not used.
 	Unit(Unit &u) = delete;
-	// Move constructor
-	// Unit(Unit &&u);
-	// Assignment operator
-	// Unit& operator=(Unit u) = default;
-	// Swap
-	// friend void swap(Unit &u1, Unit &u2);
 
 	void create_unit(UnitType * t, ALLEGRO_BITMAP * backbuffer);
 	void delete_unit();
@@ -63,6 +55,7 @@ class Pirate : public Unit {
 public:
 	Pirate();
 	// sets static values
+	// TODO: add uninitialize to destroy the bitmaps
 	static void initialize();
 protected:
 	// stores the bitmap for the class' graphics
