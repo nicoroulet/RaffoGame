@@ -1,8 +1,0 @@
-framesize = 256
-each row is a direction up, up right, right, down right, down
-columns
-0-7, attack
-8-12, death
-13-17, idle
-18-23, receive hit
-24-31, walk
