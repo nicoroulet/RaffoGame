@@ -1,0 +1,10 @@
+Prioridad alta
+    - add automatic dependencies to makefile http://make.paulandlesley.org/autodep.html
+
+Prioridad media
+	-seguir haciendo sprites
+	-cuando haya un sprite completo, implementar caminata, detencion, ataque y muerte
+	-implementar el mapa deslizable
+
+Prioridad baja
+	-optimizar la selección limitando el rango de busqueda con max_unit_size
