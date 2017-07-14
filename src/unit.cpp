@@ -76,7 +76,8 @@ int Unit::x() {
 }
 
 bool Unit::operator<(Unit & other) {
-	return pos_y + sprite->get_framesize() < other.pos_y + other.sprite->get_framesize();
+	return pos_y + sprite->get_framesize() 
+		   < other.pos_y + other.sprite->get_framesize();
 }
 
 bool Unit::is_clicked(int x, int y) {
