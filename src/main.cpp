@@ -71,25 +71,9 @@ int main(int argc, char const *argv[])
 	Sprite::initialize(backbuffer);
 	initialize_units();
 
-	//unitStructure
-	// unitStructure uStr("res/units", backbuffer, 50, al_map_rgb(200, 50, 50));
-
 	// unitManager
 	unitManager uMgr(/*&uStr, */50);
-	uMgr.create_pirate(200, 200);
-	// uMgr.create_unit(0, 800, 400);
-	// uMgr.create_unit(1, 900, 100);
-
-	// unit
-	// cerr << "creando unidad \n";
-	// ALLEGRO_BITMAP * bmp = al_load_bitmap("res/Man50.png");
-	// if (!bmp) cerr << "ERROR: creando bitmap man50\n";
-	// unit man(bmp, backbuffer, 50);
-	// cerr << "unidad creada \n";
-	// unit man = unitStr.create_unit(0);
-	// man.set_position(200,200);
-	// man.draw();
-
+	uMgr.create<Pirate>(200, 200);
 
 	// eventos
 	ALLEGRO_EVENT_QUEUE * events = al_create_event_queue();
