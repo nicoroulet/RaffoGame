@@ -13,7 +13,7 @@ map::map(const char * map_file, const char * tile_file) {
 		}
 	}
 	tiles = al_load_bitmap(tile_file);
-	if (!tiles) cerr << "ERROR cargando bitmap de tiles\n";
+	if (!tiles) cerr << "ERROR loading tiles bitmap\n";
 
 }
 

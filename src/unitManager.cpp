@@ -46,7 +46,8 @@ void unitManager::left_unclick(int x, int y, bool shift) {
 	}
 
 	if ((last_click_x == x) && (last_click_y == y)) { // Single selection
-		// TODO: implement more sophisticated selection detection (grid, quad-tree, etc)
+		/* TODO: implement more sophisticated selection detection 
+		 		 (grid, quad-tree, etc) */
 		for (auto it = units.rbegin(); it != units.rend(); ++it) {
 			if ((*it)->is_clicked(x, y)) {
 				selected.insert((*it));
@@ -77,7 +78,10 @@ void unitManager::left_unclick(int x, int y, bool shift) {
 
 void unitManager::mouse_move(int x, int y) {
 	if (clicked) {
-		rect.set_values(MIN(last_click_y, y), MAX(last_click_y, y), MIN(last_click_x, x), MAX(last_click_x, x));
+		rect.set_values(MIN(last_click_y, y), 
+						MAX(last_click_y, y), 
+						MIN(last_click_x, x), 
+						MAX(last_click_x, x));
 	}
 }
 

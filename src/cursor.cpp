@@ -24,8 +24,8 @@ cursor::cursor(ALLEGRO_BITMAP *parent, ALLEGRO_DISPLAY *display){
 	y = al_get_mouse_state_axis(state,1);
 	*/
 
-	current_cursor = al_create_mouse_cursor(split_sprites[M_NORMAL],0,0); //No entendi para que son los dos parametros 0,0 del final, no parecen setear la posicon del cursor
-
+	current_cursor = al_create_mouse_cursor(split_sprites[M_NORMAL],0,0); 
+	// Why 0,0 at the end? Doesn't seem to set cursor position
 
 	if(!al_set_mouse_cursor(display,current_cursor)) {
 		std::cerr << "Error seteando cursor" << std::endl;
@@ -38,13 +38,15 @@ void cursor::set_cursor(ALLEGRO_DISPLAY *display, int cursor_type) {
 	int ret_x;
 	int ret_y;
 	if(!al_get_mouse_cursor_position(&ret_x,&ret_y)) {
-		std::cerr << "Error obteniendo posicion current_state del cursor" << std::endl;
+		std::cerr << "Error getting mouse cursor position" << std::endl;
 		exit(1);
 	}
 	al_destroy_mouse_cursor(current_cursor);
-	current_cursor = al_create_mouse_cursor(split_sprites[cursor_type],ret_x,ret_y);
+	current_cursor = al_create_mouse_cursor(split_sprites[cursor_type],
+											ret_x,
+											ret_y);
 	if(!al_set_mouse_cursor(display,current_cursor)) {
-		std::cerr << "Error seteando cursor" << std::endl;
+		std::cerr << "Error setting cursor" << std::endl;
 		exit(1);
 	}
 	al_show_mouse_cursor(display);
