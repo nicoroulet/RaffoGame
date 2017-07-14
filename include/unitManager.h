@@ -1,6 +1,5 @@
 #pragma once
 #include "unit.h"
-#include "unitStructure.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
@@ -30,6 +29,7 @@ private:
 
 public:
 	unitManager(int maxPop);
+	// template <class UnitType>
 	void create_pirate(int x, int y);
 	void right_unclick(int x, int y, bool shift);
 	void left_click(int x, int y);

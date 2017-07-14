@@ -13,7 +13,6 @@
 #include "menu.h"
 #include "unit.h"
 #include "cursor.h"
-#include "unitStructure.h"
 #include "unitManager.h"
 
 const int FPS = 10;

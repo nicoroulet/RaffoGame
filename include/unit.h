@@ -6,21 +6,9 @@
 
 #define MAX_NAME_LENGTH 16
 
-struct UnitType {
-
-	char name[MAX_NAME_LENGTH];
-	float speed;
-
-	ALLEGRO_BITMAP * bmp;
-	int framesize;
-} __attribute__ ((__packed__)) ;
-
 class Unit {
 public:
 	Unit(Unit &u) = delete;
-
-	void create_unit(UnitType * t, ALLEGRO_BITMAP * backbuffer);
-	void delete_unit();
 
 	void move(int x, int y);
 	void clear();
@@ -47,8 +35,6 @@ protected:
 	int dst_x;
 	int dst_y;
 	bool selected;
-
-	UnitType * type;
 };
 
 class Pirate : public Unit {
