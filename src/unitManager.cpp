@@ -14,13 +14,6 @@ unitManager::unitManager(int maxPop) :
 	units(maxPop),
 	clicked(false) {}
 
-void unitManager::create_pirate(int x, int y) {
-	// FIXME: delete this new or change the way of creating units
-	Pirate * p = new Pirate();
-	p->set_position(x,y);
-	units.insert(p);
-}
-
 void unitManager::right_unclick(int x, int y, bool shift) {
 	for (auto it = selected.begin(); it != selected.end(); ++it) {
 		cerr << "moving\n";
