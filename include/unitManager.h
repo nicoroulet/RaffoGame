@@ -29,11 +29,22 @@ private:
 
 public:
     unitManager(int maxPop);
-    // template <class UnitType>
-    void create_pirate(int x, int y);
+    template <class UnitType>
+    void create(int x, int y);
     void right_unclick(int x, int y, bool shift);
     void left_click(int x, int y);
     void left_unclick(int x, int y, bool shift);
     void mouse_move(int x, int y);
     void tick();
 };
+
+template <class UnitType>
+void unitManager::create(int x, int y) {
+    static_assert(std::is_base_of<Unit, UnitType>::value,
+        "Type parameter of this class must derive from Unit");
+    // FIXME: delete this new or change the way of creating units 
+    //        (smart pointers?)
+    UnitType* u = new UnitType();
+    u->set_position(x,y);
+    units.insert(u);
+}
