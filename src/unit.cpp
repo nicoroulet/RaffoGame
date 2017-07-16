@@ -2,34 +2,27 @@
 #include "fastsqrt.h"
 
 #include <iostream>
+#include <math.h>
 
 Unit::Unit(SpriteBase *sprite) :
     selected(false),
     sprite(sprite)
     {}
 
+Direction calculate_direction(float d_x, float d_y) {
+    static const Direction direction_lookup_table[9] =
+       {RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT, UP, UP_RIGHT, RIGHT};
+    // angle from positive x axis in radians.
+    // Negative values on 3rd and 4th quadrant
+    double angle = atan2(-d_y, d_x);
+    return direction_lookup_table[(int) (angle * 4 / M_PI + 4.5)];
+}
 void Unit::move(int x, int y) {
-    // TODO: optimize this function
     dst_x = x - sprite->framesize / 2;
     dst_y = y - sprite->framesize / 2;
     float d_x = dst_x - pos_x;
     float d_y = dst_y - pos_y;
-    float tang = d_y / (d_x + 0.0001f);
-    if (tang < 0) tang = - tang;
-    Direction direction;
-    if (tang < 0.41421f) {
-        if (d_x > 0) direction = LEFT;
-        else direction = RIGHT;
-    }
-    else if (tang > 2.41421f) {
-        if (d_y < 0) direction = UP;
-        else direction = DOWN;
-    }
-    else if (d_x > 0 && d_y < 0) direction = UP_LEFT;
-    else if (d_x > 0 && d_y > 0) direction = DOWN_LEFT;
-    else if (d_x < 0 && d_y < 0) direction = UP_RIGHT;
-    else direction = DOWN_RIGHT;
-    sprite->change_direction(direction);
+    sprite->change_direction(calculate_direction(d_x, d_y));
     sprite->change_status(WALK);
 }
 
