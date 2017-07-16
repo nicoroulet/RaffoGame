@@ -3,15 +3,15 @@
 
 #include <iostream>
 
-Unit::Unit(Sprite *sprite) :
+Unit::Unit(SpriteBase *sprite) :
     selected(false),
     sprite(sprite)
     {}
 
 void Unit::move(int x, int y) {
     // TODO: optimize this function
-    dst_x = x - sprite->get_framesize()/2;
-    dst_y = y - sprite->get_framesize()/2;
+    dst_x = x - sprite->framesize / 2;
+    dst_y = y - sprite->framesize / 2;
     float d_x = dst_x - pos_x;
     float d_y = dst_y - pos_y;
     float tang = d_y / (d_x + 0.0001f);
@@ -76,8 +76,8 @@ int Unit::x() {
 }
 
 bool Unit::operator<(Unit & other) {
-    return pos_y + sprite->get_framesize() 
-           < other.pos_y + other.sprite->get_framesize();
+    return pos_y + sprite->framesize < other.pos_y +
+           other.sprite->framesize;
 }
 
 bool Unit::is_clicked(int x, int y) {
@@ -94,23 +94,3 @@ bool Unit::intersects(rectangle & rect) {
 }
 
 float Unit::speed = 30;
-// TODO delete in destructor
-Pirate::Pirate() :
-    Unit(new PirateSprite())
-    {}
-
-ALLEGRO_BITMAP *Pirate::unit_type_bitmap_ptr = NULL;
-
-void Pirate::initialize() {
-    if (!unit_type_bitmap_ptr) {
-        // al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP);
-        ALLEGRO_BITMAP *bmp = al_load_bitmap("res/units/Pirate2.png");
-        unit_type_bitmap_ptr = bmp;
-        std::cerr << "initialized pirate bitmap to " << bmp;
-    }
-    PirateSprite::initialize();
-}
-
-ALLEGRO_BITMAP *Pirate::unit_type_bitmap() {
-    return unit_type_bitmap_ptr;
-}

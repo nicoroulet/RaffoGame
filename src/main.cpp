@@ -27,7 +27,7 @@ using namespace std;
 
 void initialize_units() {
     std::cerr << "initializing units";
-    Pirate::initialize();
+    PirateBitmap::initialize();
 }
 
 int main(int argc, char const *argv[])
@@ -68,7 +68,8 @@ int main(int argc, char const *argv[])
     // menu.display(200, 200);
 
     // initialization
-    Sprite::initialize(backbuffer);
+    // TODO: initialize backbuffer for all sprites
+    SpriteBase::initialize(backbuffer);
     initialize_units();
 
     // unitManager
@@ -140,10 +141,10 @@ int main(int argc, char const *argv[])
                 }
                 break;
             // case ALLEGRO_EVENT_MOUSE_AXES:
-            //  al_clear_to_color(al_map_rgb(0,0,0));
-            //  al_draw_bitmap(img, ev.mouse.x, ev.mouse.y, 0);
-            //  al_flip_display();
-            //  break;
+            //     al_clear_to_color(al_map_rgb(0,0,0));
+            //     al_draw_bitmap(img, ev.mouse.x, ev.mouse.y, 0);
+            //     al_flip_display();
+            //     break;
 
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 repeat = false;

@@ -1,5 +1,8 @@
 #pragma once
-#include "sprite.h"
+// #include "sprite.h"
+
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 
 enum mouse_state {
     normal,
@@ -9,9 +12,7 @@ enum mouse_state {
 };
 
 class cursor{
-    
 public:
-
     cursor(ALLEGRO_BITMAP *parent, ALLEGRO_DISPLAY *display);
     void set_cursor(ALLEGRO_DISPLAY *display, int cursor_type);
     // void normal(ALLEGRO_DISPLAY *display);

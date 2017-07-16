@@ -25,11 +25,10 @@ public:
 
 protected:
     // Construct a Unit, getting the sprite
-    Unit(Sprite *sprite);
+    Unit(SpriteBase *sprite);
 
-    virtual ALLEGRO_BITMAP *unit_type_bitmap() = 0;
     static float speed;
-    Sprite *sprite;
+    SpriteBase *sprite;
     int pos_x;
     int pos_y;
     int dst_x;
@@ -37,15 +36,17 @@ protected:
     bool selected;
 };
 
-class Pirate : public Unit {
+// TODO: consider renaming
+template <class SpriteType>
+class ConcreteUnit : public Unit {
 public:
-    Pirate();
-    // sets static values
-    // TODO: add uninitialize to destroy the bitmaps
-    static void initialize();
-protected:
-    // stores the bitmap for the class' graphics
-    static ALLEGRO_BITMAP *unit_type_bitmap_ptr;
-    // retrieve the bitmap
-    virtual ALLEGRO_BITMAP *unit_type_bitmap();
+    ConcreteUnit();
 };
+
+template <class SpriteType>
+ConcreteUnit<SpriteType>::ConcreteUnit() :
+    Unit(new SpriteType()) // TODO delete in destructor
+    {}
+
+// Declare unit types here
+typedef ConcreteUnit<PirateSprite> Pirate;
