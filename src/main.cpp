@@ -28,6 +28,7 @@ using namespace std;
 void initialize_units() {
     std::cerr << "initializing units";
     PirateBitmap::initialize();
+    SoldierBitmap::initialize();
 }
 
 int main(int argc, char const *argv[])
@@ -75,6 +76,7 @@ int main(int argc, char const *argv[])
     // unitManager
     unitManager uMgr(/*&uStr, */50);
     uMgr.create<Pirate>(200, 200);
+    uMgr.create<Soldier>(400, 400);
 
     // eventos
     ALLEGRO_EVENT_QUEUE * events = al_create_event_queue();
