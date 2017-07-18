@@ -101,27 +101,3 @@ int SpriteBase::current_y_offset() {
 const int SpriteLayoutInterpreter::framesize = 256;
 const int SpriteLayoutInterpreter::y_offsets[8] =
     {0 * 256, 1 * 256, 2 * 256, 3 * 256, 4 * 256, 3 * 256, 2 * 256, 1 * 256};
-
-ALLEGRO_BITMAP *PirateBitmap::bmps[STATUS_COUNT] =
-    {nullptr, nullptr, nullptr, nullptr, nullptr};
-
-int PirateBitmap::n_frames[STATUS_COUNT] = {0, 0, 0, 0, 0};
-
-void PirateBitmap::initialize() {
-    // TODO unhardcode
-    bmps[IDLE] = al_load_bitmap("res/units/pirate/pirate_idle.png");
-    bmps[WALK] = al_load_bitmap("res/units/pirate/pirate_walk.png");
-    bmps[ATTACK] = al_load_bitmap("res/units/pirate/pirate_attack.png");
-    bmps[DIE] = al_load_bitmap("res/units/pirate/pirate_die.png");
-    bmps[HIT] = al_load_bitmap("res/units/pirate/pirate_hit.png");
-    for (int i = 0; i < STATUS_COUNT; ++i) {
-        if (bmps[i]) {
-            // TODO: unhardcode framesize
-            n_frames[i] = al_get_bitmap_width(bmps[i]) / 256;
-        } else {
-            std::cerr << "PirateBitmap ERROR: failed to load bitmap "
-                      << i << "\n";
-            n_frames[i] = 0;
-        }
-    }
-}

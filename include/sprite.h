@@ -3,6 +3,8 @@
 #include "geometry.h"
 
 #include <vector>
+#include <string>
+#include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
@@ -29,7 +31,6 @@ enum Status {
     STATUS_COUNT // sorry about this too
 };
 
-
 // This class stores the vertical offsets for different directions.
 // Consider removing if it's too trivial.
 class SpriteLayoutInterpreter {
@@ -39,7 +40,11 @@ protected:
     static const int y_offsets[8];
 };
 
-class PirateBitmap  {
+
+// char unit identifier
+// Would be best to have a string
+template<char U>
+class UnitBitmap {
 public:
     // Load bitmaps.
     // TODO: Might want to return success / failure
@@ -112,5 +117,43 @@ protected:
     }
 };
 
+template <char U>
+ALLEGRO_BITMAP *UnitBitmap<U>::bmps[STATUS_COUNT] =
+    {nullptr, nullptr, nullptr, nullptr, nullptr};
 
+template <char U>
+int UnitBitmap<U>::n_frames[STATUS_COUNT] = {0, 0, 0, 0, 0};
+
+template <char U>
+void UnitBitmap<U>::initialize() {
+    // TODO unhardcode
+    char buffer [50];
+    sprintf(buffer,"res/units/%c/%c_idle.png",U,U);
+    bmps[IDLE] = al_load_bitmap(buffer);
+    sprintf(buffer,"res/units/%c/%c_walk.png",U,U);
+    bmps[WALK] = al_load_bitmap(buffer);
+    sprintf(buffer,"res/units/%c/%c_attack.png",U,U);
+    bmps[ATTACK] = al_load_bitmap(buffer);
+    sprintf(buffer,"res/units/%c/%c_die.png",U,U);
+    bmps[DIE] = al_load_bitmap(buffer);
+    sprintf(buffer,"res/units/%c/%c_hit.png",U,U);
+    bmps[HIT] = al_load_bitmap(buffer);
+    for (int i = 0; i < STATUS_COUNT; ++i) {
+        if (bmps[i]) {
+            // TODO: unhardcode framesize
+            n_frames[i] = al_get_bitmap_width(bmps[i]) / 256;
+        } else {
+            std::cerr << "PirateBitmap ERROR: failed to load bitmap "
+                      << i << "\n";
+            n_frames[i] = 0;
+        }
+    }
+}
+
+// Declare unit underlying types here
+
+typedef UnitBitmap<'p'> PirateBitmap;
 typedef Sprite<PirateBitmap> PirateSprite;
+
+typedef UnitBitmap<'g'> SoldierBitmap;
+typedef Sprite<SoldierBitmap> SoldierSprite;

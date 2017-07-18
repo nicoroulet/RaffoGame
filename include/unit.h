@@ -50,3 +50,4 @@ ConcreteUnit<SpriteType>::ConcreteUnit() :
 
 // Declare unit types here
 typedef ConcreteUnit<PirateSprite> Pirate;
+typedef ConcreteUnit<SoldierSprite> Soldier;
