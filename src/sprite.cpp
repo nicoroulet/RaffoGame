@@ -101,3 +101,7 @@ int SpriteBase::current_y_offset() {
 const int SpriteLayoutInterpreter::framesize = 256;
 const int SpriteLayoutInterpreter::y_offsets[8] =
     {0 * 256, 1 * 256, 2 * 256, 3 * 256, 4 * 256, 3 * 256, 2 * 256, 1 * 256};
+
+const char *PirateString::path_keyword = "pirate";
+
+const char *GreenPirateString::path_keyword = "g";
