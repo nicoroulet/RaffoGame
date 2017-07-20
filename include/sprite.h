@@ -40,16 +40,25 @@ protected:
     static const int y_offsets[8];
 };
 
+class PirateString {
+public:
+    static const char *path_keyword;
+};
+
+class GreenPirateString {
+public:
+    static const char *path_keyword;
+};
 
 // char unit identifier
 // Would be best to have a string
-template<char U>
+template<class TypeString>
 class UnitBitmap {
 public:
     // Load bitmaps.
     // TODO: Might want to return success / failure
     static void initialize();
-protected:
+    // TODO: consider making these private and befriend Sprite
     static ALLEGRO_BITMAP *bmps[STATUS_COUNT];
     static int n_frames[STATUS_COUNT];
 };
@@ -106,37 +115,42 @@ public:
 };
 
 template <class Bitmap>
-class Sprite : public SpriteBase, public Bitmap {
+class Sprite : public SpriteBase {
 protected:
     virtual ALLEGRO_BITMAP *current_bitmap() override {
-        return this->bmps[status];
+        return Bitmap::bmps[status];
     }
 
     virtual int current_n_frames() override {
-        return this->n_frames[status];
+        return Bitmap::n_frames[status];
     }
 };
 
-template <char U>
-ALLEGRO_BITMAP *UnitBitmap<U>::bmps[STATUS_COUNT] =
+template <class TypeString>
+ALLEGRO_BITMAP *UnitBitmap<TypeString>::bmps[STATUS_COUNT] =
     {nullptr, nullptr, nullptr, nullptr, nullptr};
 
-template <char U>
-int UnitBitmap<U>::n_frames[STATUS_COUNT] = {0, 0, 0, 0, 0};
+template <class TypeString>
+int UnitBitmap<TypeString>::n_frames[STATUS_COUNT] = {0, 0, 0, 0, 0};
 
-template <char U>
-void UnitBitmap<U>::initialize() {
+template <class TypeString>
+void UnitBitmap<TypeString>::initialize() {
     // TODO unhardcode
     char buffer [50];
-    sprintf(buffer,"res/units/%c/%c_idle.png",U,U);
+    sprintf(buffer,"res/units/%s/%s_idle.png", TypeString::path_keyword,
+            TypeString::path_keyword);
     bmps[IDLE] = al_load_bitmap(buffer);
-    sprintf(buffer,"res/units/%c/%c_walk.png",U,U);
+    sprintf(buffer,"res/units/%s/%s_walk.png", TypeString::path_keyword,
+            TypeString::path_keyword);
     bmps[WALK] = al_load_bitmap(buffer);
-    sprintf(buffer,"res/units/%c/%c_attack.png",U,U);
+    sprintf(buffer,"res/units/%s/%s_attack.png", TypeString::path_keyword,
+            TypeString::path_keyword);
     bmps[ATTACK] = al_load_bitmap(buffer);
-    sprintf(buffer,"res/units/%c/%c_die.png",U,U);
+    sprintf(buffer,"res/units/%s/%s_die.png", TypeString::path_keyword,
+            TypeString::path_keyword);
     bmps[DIE] = al_load_bitmap(buffer);
-    sprintf(buffer,"res/units/%c/%c_hit.png",U,U);
+    sprintf(buffer,"res/units/%s/%s_hit.png", TypeString::path_keyword,
+            TypeString::path_keyword);
     bmps[HIT] = al_load_bitmap(buffer);
     for (int i = 0; i < STATUS_COUNT; ++i) {
         if (bmps[i]) {
@@ -152,8 +166,8 @@ void UnitBitmap<U>::initialize() {
 
 // Declare unit underlying types here
 
-typedef UnitBitmap<'p'> PirateBitmap;
+typedef UnitBitmap<PirateString> PirateBitmap;
 typedef Sprite<PirateBitmap> PirateSprite;
 
-typedef UnitBitmap<'g'> SoldierBitmap;
-typedef Sprite<SoldierBitmap> SoldierSprite;
+typedef UnitBitmap<GreenPirateString> GreenPirateBitmap;
+typedef Sprite<GreenPirateBitmap> GreenPirateSprite;
