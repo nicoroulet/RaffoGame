@@ -5,6 +5,7 @@
 #include <set>
 #include <list>
 #include <type_traits>
+#include <memory>
 
 #include "unit.h"
 #include "geometry.h"
@@ -16,10 +17,13 @@
 class unitManager {
 private:
     struct compare {
-        bool operator() (Unit* u1, Unit* u2) const {return *u1 < *u2;}
+        bool operator() (std::shared_ptr<Unit> u1,
+                         std::shared_ptr<Unit> u2) const {
+            return *u1 < *u2;
+        }
     };
-    sorted_array<Unit*, compare> units;
-    std::set<Unit*> selected;
+    sorted_array<std::shared_ptr<Unit>, compare> units;
+    std::set<std::shared_ptr<Unit>> selected;
 
     int display_width;
     int display_height;
@@ -44,7 +48,7 @@ void unitManager::create(int x, int y) {
     static_assert(std::is_base_of<Unit, UnitType>::value,
         "Type parameter of this class must derive from Unit");
     // FIXME: delete this new or change the way of creating units (smart poiners?)
-    UnitType* u = new UnitType();
+    auto u = std::make_shared<UnitType>();
     u->set_position(x,y);
     units.insert(u);
 }
