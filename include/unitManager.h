@@ -9,6 +9,7 @@
 
 #include "unit.h"
 #include "geometry.h"
+#include "map.h"
 #include "sorted_array.h"
 
 // Controls units
@@ -31,6 +32,8 @@ private:
     int last_click_y;
     bool clicked;
     drawable_rectangle rect;
+
+    Map map;
 
 public:
     unitManager(int maxPop);
