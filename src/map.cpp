@@ -1,27 +1,24 @@
 #include "map.h"
-#include <fstream>
-#include <iostream>
 
-using namespace std;
-map::map(const char * map_file, const char * tile_file) {
-    ifstream map_f(map_file);
-    map_f >> size;
-    matrix = vector<vector<int> >(size, vector<int>(size));
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            map_f >> matrix[i][j];
+const char *WaterTilePath::path = "res/tiles/water.png";
+
+Map::Map(int height, int width) :
+    height(height),
+    width(width),
+    matrix(height, std::vector<std::shared_ptr<Tile> >(width))
+{
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            matrix[i][j] = std::make_shared<WaterTile>();
         }
     }
-    tiles = al_load_bitmap(tile_file);
-    if (!tiles) cerr << "ERROR loading tiles bitmap\n";
-
 }
 
-int map::get_offset_x() {
-    return offset_x;
+void Map::draw() {
+    int tile_size = 512; // TODO unhardcode
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            matrix[i][j]->draw(i * tile_size, j * tile_size);
+        }
+    }
 }
-
-int map::get_offset_y() {
-    return offset_y;
-}
-

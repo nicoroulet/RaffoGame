@@ -29,6 +29,8 @@ void initialize_units() {
     std::cerr << "initializing units";
     PirateBitmap::initialize();
     GreenPirateBitmap::initialize();
+
+    WaterTile::initialize();
 }
 
 int main(int argc, char const *argv[])

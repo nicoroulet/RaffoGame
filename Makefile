@@ -12,7 +12,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 
 # FIXME: this is a temporary hack!
 INCLUDES := $(shell find $(INCDIR) -type f -name *.h)
-CFLAGS := -g -std=c++11
+CFLAGS := -g -std=c++14
 # TODO: this is now unused, use in linking phase
 LIB := $(pkg-config --libs allegro-5 allegro_audio-5 allegro_acodec-5 allegro_image-5 allegro_font-5 allegro_color-5)
 INC := -I include
