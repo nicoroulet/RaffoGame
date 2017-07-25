@@ -31,6 +31,7 @@ void initialize_units() {
     GreenPirateBitmap::initialize();
 
     WaterTile::initialize();
+    Ship::initialize();
 }
 
 int main(int argc, char const *argv[])
