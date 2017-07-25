@@ -24,6 +24,9 @@ private:
 };
 
 template <class TilePath>
+Tile<TilePath>::Tile(int x, int y) : x(x), y(y) {}
+
+template <class TilePath>
 void Tile<TilePath>::draw() {
     al_draw_bitmap(this->bitmap, x, y, 0);
 }

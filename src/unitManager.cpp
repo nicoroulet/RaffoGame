@@ -13,7 +13,8 @@ using namespace std;
 unitManager::unitManager(int maxPop) :
     units(maxPop),
     clicked(false),
-    map(10, 10) {}
+    map(10, 10),
+    ship(200, -200) {}
 
 void unitManager::right_unclick(int x, int y, bool shift) {
     for (auto it = selected.begin(); it != selected.end(); ++it) {
@@ -80,7 +81,10 @@ void unitManager::mouse_move(int x, int y) {
 }
 
 void unitManager::tick() {
+    // TODO: temporary, just for testing
     map.draw();
+    ship.draw();
+
     // if (clicked) {
     //     rect.clear();
     // }

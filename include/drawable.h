@@ -28,6 +28,8 @@ public:
     static void initialize();
 protected:
     static ALLEGRO_BITMAP *bitmap;
+    // static int width;
+    // static int height;
 };
 
 template <class BitmapPath>
@@ -42,5 +44,8 @@ void Bitmap<BitmapPath>::initialize() {
         std::cerr << "Drawable ERROR: failed to load: "
                   << BitmapPath::path
                   << std::endl;
-    }
+    }/* else {
+        width = al_get_bitmap_width(bitmap);
+        height = al_get_bitmap_height(bitmap);
+    }*/
 }

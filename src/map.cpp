@@ -2,9 +2,6 @@
 
 const char *WaterTilePath::path = "res/tiles/water.png";
 
-template <class TilePath>
-Tile<TilePath>::Tile(int x, int y) : x(x), y(y) {}
-
 Map::Map(int height, int width) :
     height(height),
     width(width),
