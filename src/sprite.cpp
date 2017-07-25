@@ -17,8 +17,8 @@ SpriteBase::~SpriteBase() {
 }
 
 void SpriteBase::draw(int x, int y, bool selected) {
-    if (!cleared)
-        std::cerr << "SpriteBase WARNING: did not call clear before draw\n";
+    // if (!cleared)
+    //     std::cerr << "SpriteBase WARNING: did not call clear before draw\n";
     cleared = false;
 
     al_set_target_bitmap(bg);
@@ -39,7 +39,7 @@ void SpriteBase::draw(int x, int y, bool selected) {
 }
 
 void SpriteBase::clear(){
-    if (cleared) std::cerr << "SpriteBase WARNING: clear called twice\n";
+    // if (cleared) std::cerr << "SpriteBase WARNING: clear called twice\n";
     cleared = true;
     al_set_target_bitmap(backbuffer);
     al_draw_bitmap_region(bg, 0, 0, framesize, framesize, pos_x, pos_y, 0);
