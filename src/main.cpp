@@ -12,6 +12,7 @@
 #include "sprite.h"
 #include "menu.h"
 #include "unit.h"
+#include "camera.h"
 #include "cursor.h"
 #include "unitManager.h"
 
@@ -26,7 +27,7 @@ const int FPS = 10;
 using namespace std;
 
 void initialize_units() {
-    std::cerr << "initializing units";
+    std::cerr << "initializing units" << std::endl;
     PirateBitmap::initialize();
     GreenPirateBitmap::initialize();
 
@@ -81,6 +82,10 @@ int main(int argc, char const *argv[])
     uMgr.create<Pirate>(200, 200);
     uMgr.create<GreenPirate>(400, 400);
 
+    int screen_width = al_get_display_width(display);
+    int screen_height = al_get_display_height(display);
+    Camera cam = Camera(screen_width, screen_height);
+
     // eventos
     ALLEGRO_EVENT_QUEUE * events = al_create_event_queue();
     if (!events) cerr << "Error creando event queue\n";
@@ -103,16 +108,22 @@ int main(int argc, char const *argv[])
     cursor raton(cursor_map, display);
 
     int x=0; int y=0;
-    bool shift = false;
-    bool click = false;
     bool repeat = true;
+    /* Key press */
+    bool shift = false;
+    bool lctrl = false;
+    bool click = false;
+
+    /* Camera parameters. */
+    float zoom = 1.0, rotate = 0;
+    float scroll_x, scroll_y;
     while(repeat) {
         ALLEGRO_EVENT ev;
         al_wait_for_event(events, &ev);
         // if (!ev) cerr << "Error en el mouse event\n";
         switch(ev.type) {
             case ALLEGRO_EVENT_TIMER:
-                uMgr.tick();
+                uMgr.tick(cam);
                 al_flip_display();
                 break;
             case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
@@ -132,15 +143,37 @@ int main(int argc, char const *argv[])
                 break;
             case ALLEGRO_EVENT_MOUSE_AXES:
                 uMgr.mouse_move(ev.mouse.x, ev.mouse.y);
+                if (!lctrl){
+                    zoom += ev.mouse.dz * 0.1 * zoom;
+                    cam.set_zoom(zoom);
+                }
+                if (lctrl){
+                    rotate += ev.mouse.dz * 0.1;
+                }
+                /* Zoom limits */
+                if (zoom < 0.1) zoom = 0.1;
+                if (zoom > 10) zoom = 10;
                 break;
-            case ALLEGRO_EVENT_KEY_DOWN:
-                switch (ev.keyboard.keycode) {
+            case ALLEGRO_EVENT_KEY_DOWN: 
+                switch(ev.keyboard.keycode) {
+                    /* Check if Keyboard Modifier Flags is better */
+                    case ALLEGRO_KEY_ESCAPE:
+                        repeat = false;
+                        break;
+                    case ALLEGRO_KEY_LCTRL:
+                        lctrl = true;
+                        break;
                     case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
                         shift = true;
+                        break;
+                    case ALLEGRO_KEY_ENTER:
+                        rotate = 0;
+                        break;
                 }
-                break;
             case ALLEGRO_EVENT_KEY_UP:
-                switch (ev.keyboard.keycode) {
+                switch(ev.keyboard.keycode) {
+                    case ALLEGRO_KEY_LCTRL:
+                        lctrl = false;
                     case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
                         shift = false;
                 }

@@ -1,4 +1,5 @@
 #include "unitManager.h"
+#include "camera.h"
 #include <iostream>
 #include <set>
 #include <utility>
@@ -80,8 +81,12 @@ void unitManager::mouse_move(int x, int y) {
     }
 }
 
-void unitManager::tick() {
+void unitManager::tick(Camera &cam) {
     // TODO: temporary, just for testing
+    auto it = units.begin();
+    ship.move();
+    cam.set_position(ship.pos_x(), ship.pos_y());
+    cam.set_transform_ship();
     map.draw();
     ship.draw();
 
