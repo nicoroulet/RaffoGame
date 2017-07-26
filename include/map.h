@@ -1,6 +1,7 @@
 #pragma once
 
 #include "drawable.h"
+#include "camera.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -19,6 +20,9 @@ class Tile : public Bitmap<TilePath> {
 public:
     Tile(int x, int y);
     virtual void draw();
+    void move();
+    int pos_x();
+    int pos_y();
 private:
     int x, y;
 };
@@ -30,6 +34,23 @@ template <class TilePath>
 void Tile<TilePath>::draw() {
     al_draw_bitmap(this->bitmap, x, y, 0);
 }
+
+// Testing (movement of ship)
+template <class TilePath>
+void Tile<TilePath>::move() {
+  //x -= 1;
+  y += 10; 
+} 
+
+template <class TilePath>
+int Tile<TilePath>::pos_x() {
+  return x;
+} 
+
+template <class TilePath>
+int Tile<TilePath>::pos_y() {
+  return y;
+} 
 
 typedef Tile<WaterTilePath> WaterTile;
 
