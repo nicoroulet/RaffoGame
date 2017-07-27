@@ -10,6 +10,8 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "sprite.h"
+#include "ship.h"
+#include "map.h"
 #include "menu.h"
 #include "unit.h"
 #include "camera.h"
@@ -27,12 +29,14 @@ const int FPS = 20;
 using namespace std;
 
 void initialize_units() {
+    // TODO add a compile time list of initializables to avoid this
+    // highly error-prone initialization method
     std::cerr << "initializing units" << std::endl;
     PirateBitmap::initialize();
     GreenPirateBitmap::initialize();
 
     WaterTile::initialize();
-    Ship::initialize();
+    SimpleDrawable<CaravelPath>::initialize();
 }
 
 int main(int argc, char const *argv[])
@@ -78,9 +82,19 @@ int main(int argc, char const *argv[])
     initialize_units();
 
     // unitManager
-    unitManager uMgr(/*&uStr, */50);
-    uMgr.create<Pirate>(200, 200);
-    uMgr.create<GreenPirate>(400, 400);
+    // unitManager uMgr(/*&uStr, */50);
+    // uMgr.create<Pirate>(200, 200);
+    // uMgr.create<GreenPirate>(400, 400);
+
+    Map map(15, 15);
+    sp<Ship> ship = make_shared<Caravel>(200, 200);
+    map.add_ship(ship);
+    sp<Unit> pirate1 = make_shared<Pirate>();
+    pirate1->set_position(50, 50);
+    ship->add_crew(pirate1);
+    sp<Unit> pirate2 = make_shared<Pirate>();
+    pirate2->set_position(100, 100);
+    ship->add_crew(pirate2);
 
     int screen_width = al_get_display_width(display);
     int screen_height = al_get_display_height(display);
@@ -128,29 +142,33 @@ int main(int argc, char const *argv[])
         switch(ev.type) {
             case ALLEGRO_EVENT_TIMER:
                 if (RIGHT)
-                    uMgr.turn_ship_right();
+                    ship->turn_right(0.01);
+                    // uMgr.turn_ship_right();
                 if (LEFT)
-                    uMgr.turn_ship_left();
-                uMgr.tick(cam, shot);
+                    ship->turn_left(0.01);
+                    // uMgr.turn_ship_left();
+                // uMgr.tick(cam, shot);
+                // TODO: consider making camera a singleton instead of passing
+                map.draw(cam);
                 al_flip_display();
                 break;
-            case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-                // std::cerr << ev.mouse.button;
-                if (ev.mouse.button == 1) {
-                    uMgr.left_unclick(ev.mouse.x, ev.mouse.y, shift);
+            // case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+            //     // std::cerr << ev.mouse.button;
+            //     if (ev.mouse.button == 1) {
+            //         uMgr.left_unclick(ev.mouse.x, ev.mouse.y, shift);
 
-                }
-                if (ev.mouse.button == 2) {
-                    uMgr.right_unclick(ev.mouse.x, ev.mouse.y, shift);
-                }
-                break;
-            case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-                if (ev.mouse.button == 1) {
-                    uMgr.left_click(ev.mouse.x, ev.mouse.y);
-                }
-                break;
+            //     }
+            //     if (ev.mouse.button == 2) {
+            //         uMgr.right_unclick(ev.mouse.x, ev.mouse.y, shift);
+            //     }
+            //     break;
+            // case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+            //     if (ev.mouse.button == 1) {
+            //         uMgr.left_click(ev.mouse.x, ev.mouse.y);
+            //     }
+            //     break;
             case ALLEGRO_EVENT_MOUSE_AXES:
-                uMgr.mouse_move(ev.mouse.x, ev.mouse.y);
+                // uMgr.mouse_move(ev.mouse.x, ev.mouse.y);
                 if (!lctrl){
                     zoom += ev.mouse.dz * 0.1 * zoom;
                     cam.set_zoom(zoom);
@@ -162,7 +180,7 @@ int main(int argc, char const *argv[])
                 if (zoom < 0.1) zoom = 0.1;
                 if (zoom > 10) zoom = 10;
                 break;
-            case ALLEGRO_EVENT_KEY_DOWN: 
+            case ALLEGRO_EVENT_KEY_DOWN:
                 switch(ev.keyboard.keycode) {
                     /* Check if Keyboard Modifier Flags is better */
                     case ALLEGRO_KEY_ESCAPE:

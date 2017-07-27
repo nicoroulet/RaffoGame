@@ -43,3 +43,18 @@ enum CameraShot {
 	FIX_MAP,
 	FREE
 };
+
+// class Camera {
+// public:
+//     Camera();
+//     /*
+//      * The camera is always centered on a ship (no free mode for now)
+//      */
+//     void set_center(std::shared_ptr<Ship> ship);
+//     void set_camera_map();
+//     void set_camera_ship();
+//     void set_camera_third_ship(std::shared_ptr<Ship> third_ship);
+// private:
+//     std::shared_ptr<Ship> center_ship;
+//     ALLEGRO_TRANSFORM transform;
+// }
