@@ -87,6 +87,7 @@ void unitManager::tick(Camera &cam) {
     ship.move();
     cam.set_position(ship.pos_x(), ship.pos_y());
     cam.set_transform_ship();
+    al_clear_to_color(al_map_rgb(0, 0, 0));
     map.draw();
     ship.draw();
 
