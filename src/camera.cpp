@@ -50,6 +50,7 @@ void Camera::set_transform_map() {
     al_translate_transform(&transform, -pos_x, -pos_y);
     al_rotate_transform(&transform, rotation);
     al_scale_transform(&transform, zoom, zoom);
+    al_translate_transform(&transform, screen_width * 0.5, screen_height * 0.5);
     al_use_transform(&transform);
 }
 
@@ -58,10 +59,11 @@ void Camera::updatePosition() {
     //pos_y = center->get_pos_y();
 }
 
-void Camera::set_position(int x, int y) {
+void Camera::set_position(int x, int y, float rotate) {
     /* center in x,y + size of sprite 
      * Hardcorded sprite offset TODO
      */
+    rotation = rotate;
     pos_x = x - screen_width / 2 + 1090;
     pos_y = y - screen_height / 2 + 1250;
 }

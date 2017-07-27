@@ -85,10 +85,15 @@ void unitManager::tick(Camera &cam) {
     // TODO: temporary, just for testing
     auto it = units.begin();
     ship.move();
-    cam.set_position(ship.pos_x(), ship.pos_y());
-    cam.set_transform_ship();
+    cam.set_position(ship.pos_x(), ship.pos_y(), ship.rotation());
     al_clear_to_color(al_map_rgb(0, 0, 0));
+
+    /* Draw Map, other Ships+crew */
+    cam.set_transform_map();
     map.draw();
+
+    /* Draw Ship and self crew */
+    cam.set_transform_ship();
     ship.draw();
 
     // if (clicked) {

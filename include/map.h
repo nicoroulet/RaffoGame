@@ -23,12 +23,14 @@ public:
     void move();
     int pos_x();
     int pos_y();
+    float rotation();
 private:
     int x, y;
+    float direction;
 };
 
 template <class TilePath>
-Tile<TilePath>::Tile(int x, int y) : x(x), y(y) {}
+Tile<TilePath>::Tile(int x, int y) : x(x), y(y), direction(0) {}
 
 template <class TilePath>
 void Tile<TilePath>::draw() {
@@ -39,7 +41,8 @@ void Tile<TilePath>::draw() {
 template <class TilePath>
 void Tile<TilePath>::move() {
   //x -= 1;
-  y += 10; 
+  y += 15; 
+  direction += 0.005; 
 } 
 
 template <class TilePath>
@@ -50,6 +53,11 @@ int Tile<TilePath>::pos_x() {
 template <class TilePath>
 int Tile<TilePath>::pos_y() {
   return y;
+}
+
+template <class TilePath>
+float Tile<TilePath>::rotation() {
+  return direction;
 } 
 
 typedef Tile<WaterTilePath> WaterTile;
