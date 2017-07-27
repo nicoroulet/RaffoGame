@@ -16,7 +16,7 @@ public:
     int get_pos_x();
     int get_pos_y();
     void set_zoom(float scale);
-    void set_position(int x, int y);
+    void set_position(int x, int y, float rotate);
     void set_transform_identity();
     void set_transform_translate();
     void set_transform_ship();
