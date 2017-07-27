@@ -35,5 +35,3 @@ private:
     int screen_height;
     ALLEGRO_TRANSFORM transform;
 };
-
-extern Camera camera;

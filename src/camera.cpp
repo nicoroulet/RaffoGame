@@ -40,6 +40,7 @@ void Camera::set_transform_ship() {
     al_identity_transform(&transform);
     al_translate_transform(&transform, -pos_x, -pos_y);
     al_scale_transform(&transform, zoom, zoom);
+    al_translate_transform(&transform, screen_width * 0.5, screen_height * 0.5);
     al_use_transform(&transform);
 }
 
@@ -58,9 +59,11 @@ void Camera::updatePosition() {
 }
 
 void Camera::set_position(int x, int y) {
-    /* center in x,y + size of sprite */
-    pos_x = x - screen_width / 2 + 512;
-    pos_y = y - screen_height / 2 + 512;
+    /* center in x,y + size of sprite 
+     * Hardcorded sprite offset TODO
+     */
+    pos_x = x - screen_width / 2 + 1090;
+    pos_y = y - screen_height / 2 + 1250;
 }
 
 void Camera::set_zoom(float scale) {
