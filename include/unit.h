@@ -1,6 +1,8 @@
 #pragma once
 #include "sprite.h"
 #include "geometry.h"
+#include "drawable.h"
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
@@ -18,7 +20,7 @@ public:
     void set_position(int x, int y);
     int y();
     int x();
-    bool operator<(Unit & other);
+    // bool operator<(Unit & other);
     bool is_clicked(int x, int y);          // check whether the unit sprite is non-transparent in pos x, y
     bool is_broadly_clicked(int x, int y);  // check whether the unit sprite is in pos x, y
     bool intersects(rectangle & rect);
@@ -45,7 +47,7 @@ public:
 
 template <class SpriteType>
 ConcreteUnit<SpriteType>::ConcreteUnit() :
-    Unit(new SpriteType()) // TODO delete in destructor
+    Unit(new SpriteType()) // TODO use unique_ptr
     {}
 
 // Declare unit types here

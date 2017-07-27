@@ -17,11 +17,16 @@ Direction calculate_direction(float d_x, float d_y) {
     double angle = atan2(-d_y, d_x);
     return direction_lookup_table[(int) (angle * 4 / M_PI + 4.5)];
 }
+
+/*
+ * FIXME: decide whether x, y should be relative or absolute
+ * Reimplement after relative positions have been added
+ */
 void Unit::move(int x, int y) {
     dst_x = x - sprite->framesize / 2;
     dst_y = y - sprite->framesize / 2;
-    float d_x = dst_x - pos_x;
-    float d_y = dst_y - pos_y;
+    float d_x = dst_x - x;
+    float d_y = dst_y - y;
     sprite->change_direction(calculate_direction(d_x, d_y));
     sprite->change_status(WALK);
 }
@@ -30,6 +35,10 @@ void Unit::clear() {
     sprite->clear();
 }
 
+/*
+ * Unit is drawn considering (0, 0) is the center of the underlaying ship.
+ * An appropriate transform should be used to have a correct drawing.
+ */
 void Unit::draw() {
     float d_x = dst_x - pos_x;
     float d_y = dst_y - pos_y;
@@ -57,7 +66,7 @@ void Unit::set_position(int x, int y) {
     pos_y = y-1;
     dst_x = x;
     dst_y = y;
-    draw();
+    // draw();
 }
 
 int Unit::y() {
@@ -68,10 +77,10 @@ int Unit::x() {
     return pos_x;
 }
 
-bool Unit::operator<(Unit & other) {
-    return pos_y + sprite->framesize < other.pos_y +
-           other.sprite->framesize;
-}
+// bool Unit::operator<(Unit & other) {
+//     return y + sprite->framesize < other.y +
+//            other.sprite->framesize;
+// }
 
 bool Unit::is_clicked(int x, int y) {
     return sprite->is_clicked(x, y);

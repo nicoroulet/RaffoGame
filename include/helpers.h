@@ -1,6 +1,13 @@
 #pragma once
 
+#include <memory>
 typedef float radians;
+
+template <class Pointee>
+using sp = std::shared_ptr<Pointee>;
+
+template <class Pointee>
+using up = std::unique_ptr<Pointee>;
 
 struct Point {
     int x;
