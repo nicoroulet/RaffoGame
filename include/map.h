@@ -7,6 +7,7 @@
 #include <allegro5/allegro_image.h>
 #include <memory>
 #include <vector>
+#include <math.h>
 
 #include <iostream>
 
@@ -23,14 +24,17 @@ public:
     void move();
     int pos_x();
     int pos_y();
-    float rotation();
+    float get_rotation();
+    void turn_left(float rotate);
+    void turn_right(float rotate);
 private:
     int x, y;
-    float direction;
+    float rotation;
+    float speed;
 };
 
 template <class TilePath>
-Tile<TilePath>::Tile(int x, int y) : x(x), y(y), direction(0) {}
+Tile<TilePath>::Tile(int x, int y) : x(x), y(y), rotation(0), speed(50) {}
 
 template <class TilePath>
 void Tile<TilePath>::draw() {
@@ -40,10 +44,19 @@ void Tile<TilePath>::draw() {
 // Testing (movement of ship)
 template <class TilePath>
 void Tile<TilePath>::move() {
-  //x -= 1;
-  y += 15; 
-  direction += 0.005; 
-} 
+  x -= speed * sin(rotation);
+  y -= speed * cos(rotation);
+}
+
+template <class TilePath>
+void Tile<TilePath>::turn_left(float rotate) {
+  rotation += rotate*0.1*speed;
+}
+
+template <class TilePath>
+void Tile<TilePath>::turn_right(float rotate) {
+  rotation -= rotate*0.1*speed;
+}
 
 template <class TilePath>
 int Tile<TilePath>::pos_x() {
@@ -56,8 +69,8 @@ int Tile<TilePath>::pos_y() {
 }
 
 template <class TilePath>
-float Tile<TilePath>::rotation() {
-  return direction;
+float Tile<TilePath>::get_rotation() {
+  return rotation;
 } 
 
 typedef Tile<WaterTilePath> WaterTile;

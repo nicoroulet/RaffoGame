@@ -113,6 +113,8 @@ int main(int argc, char const *argv[])
     bool shift = false;
     bool lctrl = false;
     bool click = false;
+    bool RIGHT = false;
+    bool LEFT = false;
 
     /* Camera parameters. */
     float zoom = 1.0, rotate = 0;
@@ -123,6 +125,10 @@ int main(int argc, char const *argv[])
         // if (!ev) cerr << "Error en el mouse event\n";
         switch(ev.type) {
             case ALLEGRO_EVENT_TIMER:
+                if (RIGHT)
+                    uMgr.turn_ship_right();
+                if (LEFT)
+                    uMgr.turn_ship_left();
                 uMgr.tick(cam);
                 al_flip_display();
                 break;
@@ -166,16 +172,28 @@ int main(int argc, char const *argv[])
                     case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
                         shift = true;
                         break;
-                    case ALLEGRO_KEY_ENTER:
-                        rotate = 0;
+                    case ALLEGRO_KEY_D:
+                        RIGHT = true;
+                        break;
+                    case ALLEGRO_KEY_A:
+                        LEFT = true;
                         break;
                 }
+                break;
             case ALLEGRO_EVENT_KEY_UP:
                 switch(ev.keyboard.keycode) {
                     case ALLEGRO_KEY_LCTRL:
                         lctrl = false;
+                        break;
                     case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
                         shift = false;
+                        break;
+                    case ALLEGRO_KEY_A:
+                        LEFT = false;
+                        break;
+                    case ALLEGRO_KEY_D:
+                        RIGHT = false;
+                        break;
                 }
                 break;
             // case ALLEGRO_EVENT_MOUSE_AXES:

@@ -48,6 +48,8 @@ public:
     void left_click(int x, int y);
     void left_unclick(int x, int y, bool shift);
     void mouse_move(int x, int y);
+    void turn_ship_right();
+    void turn_ship_left();
     void tick(Camera &cam);
 };
 
