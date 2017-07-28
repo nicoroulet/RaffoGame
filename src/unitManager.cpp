@@ -81,11 +81,19 @@ void unitManager::mouse_move(int x, int y) {
     }
 }
 
+void unitManager::turn_ship_right() {
+    ship.turn_right(0.01);
+}
+
+void unitManager::turn_ship_left() {
+    ship.turn_left(0.01);
+}
+
 void unitManager::tick(Camera &cam) {
     // TODO: temporary, just for testing
     auto it = units.begin();
     ship.move();
-    cam.set_position(ship.pos_x(), ship.pos_y(), ship.rotation());
+    cam.set_position(ship.pos_x(), ship.pos_y(), ship.get_rotation());
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     /* Draw Map, other Ships+crew */
