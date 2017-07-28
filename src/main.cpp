@@ -16,7 +16,7 @@
 #include "cursor.h"
 #include "unitManager.h"
 
-const int FPS = 10;
+const int FPS = 20;
 // const unsigned int granularity = 50;
 
 // struct status {
@@ -85,6 +85,7 @@ int main(int argc, char const *argv[])
     int screen_width = al_get_display_width(display);
     int screen_height = al_get_display_height(display);
     Camera cam = Camera(screen_width, screen_height);
+    CameraShot shot = FIX_SHIP;
 
     // eventos
     ALLEGRO_EVENT_QUEUE * events = al_create_event_queue();
@@ -115,6 +116,7 @@ int main(int argc, char const *argv[])
     bool click = false;
     bool RIGHT = false;
     bool LEFT = false;
+    int SHOT_VAR = 0;
 
     /* Camera parameters. */
     float zoom = 1.0, rotate = 0;
@@ -129,7 +131,7 @@ int main(int argc, char const *argv[])
                     uMgr.turn_ship_right();
                 if (LEFT)
                     uMgr.turn_ship_left();
-                uMgr.tick(cam);
+                uMgr.tick(cam, shot);
                 al_flip_display();
                 break;
             case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
@@ -177,6 +179,10 @@ int main(int argc, char const *argv[])
                         break;
                     case ALLEGRO_KEY_A:
                         LEFT = true;
+                        break;
+                    case ALLEGRO_KEY_V:
+                        SHOT_VAR = (SHOT_VAR+1) % 3;
+                        shot = CameraShot(SHOT_VAR);
                         break;
                 }
                 break;

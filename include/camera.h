@@ -19,8 +19,10 @@ public:
     void set_position(int x, int y, float rotate);
     void set_transform_identity();
     void set_transform_translate();
-    void set_transform_ship();
-    void set_transform_map();
+    void set_transform_fixed_ship_ship();
+    void set_transform_fixed_ship_map();
+    void set_transform_fixed_map_ship();
+    void set_transform_fixed_map_map();
 
 private:
     void updatePosition();
@@ -34,4 +36,10 @@ private:
     int screen_width;
     int screen_height;
     ALLEGRO_TRANSFORM transform;
+};
+
+enum CameraShot {
+	FIX_SHIP,
+	FIX_MAP,
+	FREE
 };

@@ -35,7 +35,7 @@ void Camera::set_transform_translate() {
     al_use_transform(&transform);
 }
 
-void Camera::set_transform_ship() {
+void Camera::set_transform_fixed_ship_ship() {
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
     al_translate_transform(&transform, -pos_x, -pos_y);
@@ -44,11 +44,30 @@ void Camera::set_transform_ship() {
     al_use_transform(&transform);
 }
 
-void Camera::set_transform_map() {
+void Camera::set_transform_fixed_ship_map() {
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
     al_translate_transform(&transform, -pos_x, -pos_y);
     al_rotate_transform(&transform, rotation);
+    al_scale_transform(&transform, zoom, zoom);
+    al_translate_transform(&transform, screen_width * 0.5, screen_height * 0.5);
+    al_use_transform(&transform);
+}
+
+void Camera::set_transform_fixed_map_ship() {
+    ALLEGRO_TRANSFORM transform;
+    al_identity_transform(&transform);
+    al_translate_transform(&transform, -pos_x, -pos_y);
+    al_scale_transform(&transform, zoom, zoom);
+    al_rotate_transform(&transform, -rotation);
+    al_translate_transform(&transform, screen_width * 0.5, screen_height * 0.5);
+    al_use_transform(&transform);
+}
+
+void Camera::set_transform_fixed_map_map() {
+    ALLEGRO_TRANSFORM transform;
+    al_identity_transform(&transform);
+    al_translate_transform(&transform, -pos_x, -pos_y);
     al_scale_transform(&transform, zoom, zoom);
     al_translate_transform(&transform, screen_width * 0.5, screen_height * 0.5);
     al_use_transform(&transform);
