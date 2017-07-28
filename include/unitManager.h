@@ -50,7 +50,7 @@ public:
     void mouse_move(int x, int y);
     void turn_ship_right();
     void turn_ship_left();
-    void tick(Camera &cam);
+    void tick(Camera &cam, CameraShot shot);
 };
 
 template <class UnitType>

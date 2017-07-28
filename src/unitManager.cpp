@@ -89,32 +89,71 @@ void unitManager::turn_ship_left() {
     ship.turn_left(0.01);
 }
 
-void unitManager::tick(Camera &cam) {
+void unitManager::tick(Camera &cam, CameraShot shot) {
     // TODO: temporary, just for testing
     auto it = units.begin();
     ship.move();
     cam.set_position(ship.pos_x(), ship.pos_y(), ship.get_rotation());
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
-    /* Draw Map, other Ships+crew */
-    cam.set_transform_map();
-    map.draw();
+    // TODO Condense this switch
+    switch (shot) {
+        case FIX_MAP:
+            /* Draw Map, other Ships+crew */
+            cam.set_transform_fixed_map_map();
+            map.draw();
 
-    /* Draw Ship and self crew */
-    cam.set_transform_ship();
-    ship.draw();
+            /* Draw Ship and self crew */
+            cam.set_transform_fixed_map_ship();
+            ship.draw();
 
+            units.resort();
+            for (auto it = units.begin(); it != units.end(); ++it) {
+                (*it)->draw();
+            }
+            if (clicked) {
+                rect.draw();
+            }
+            break;
+        case FIX_SHIP:
+            /* Draw Map, other Ships+crew */
+            cam.set_transform_fixed_ship_map();
+            map.draw();
+
+            /* Draw Ship and self crew */
+            cam.set_transform_fixed_ship_ship();
+            ship.draw();
+
+            units.resort();
+            for (auto it = units.begin(); it != units.end(); ++it) {
+                (*it)->draw();
+            }
+            if (clicked) {
+                rect.draw();
+            }
+            break;
+        case FREE:
+            /* Draw Map, other Ships+crew */
+            //cam.set_transform_fixed_ship_map();
+            map.draw();
+
+            /* Draw Ship and self crew */
+            //cam.set_transform_fixed_ship_ship();
+            ship.draw();
+
+            units.resort();
+            for (auto it = units.begin(); it != units.end(); ++it) {
+                (*it)->draw();
+            }
+            if (clicked) {
+                rect.draw();
+            }
+            break;
+    }
     // if (clicked) {
     //     rect.clear();
     // }
     // for (auto it = units.rbegin(); it != units.rend(); ++it) {
     //     (*it)->clear();
     // }
-    units.resort();
-    for (auto it = units.begin(); it != units.end(); ++it) {
-        (*it)->draw();
-    }
-    if (clicked) {
-        rect.draw();
-    }
 }
