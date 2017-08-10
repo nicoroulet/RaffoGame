@@ -22,6 +22,7 @@ public:
     float get_rotation();
     void turn_left(float rotate);
     void turn_right(float rotate);
+    void change_sails_aperture();
 protected:
     Ship(int x, int y, sp<Drawable> drawable);
     sp<Drawable> drawable;
@@ -29,8 +30,11 @@ protected:
 
     int x, y;
     float rotation;
+    float goal_speed;
     float speed;
     int height, width;
+    bool sails_aperture;
+    float sails_efficiency;
 };
 
 template <class ShipPath>
