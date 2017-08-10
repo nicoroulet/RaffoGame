@@ -17,6 +17,7 @@
 #include "camera.h"
 #include "cursor.h"
 #include "unitManager.h"
+#include "weather.h"
 
 const int FPS = 20;
 // const unsigned int granularity = 50;
@@ -131,6 +132,8 @@ int main(int argc, char const *argv[])
     bool RIGHT = false;
     bool LEFT = false;
     int SHOT_VAR = 0;
+    float ZOOM_LIM_OUT = 0.3;
+    float ZOOM_LIM_IN = 1.2;
 
     /* Camera parameters. */
     float zoom = 1.0, rotate = 0;
@@ -171,14 +174,14 @@ int main(int argc, char const *argv[])
                 // uMgr.mouse_move(ev.mouse.x, ev.mouse.y);
                 if (!lctrl){
                     zoom += ev.mouse.dz * 0.1 * zoom;
+                    /* Zoom limits */
+                    if (zoom < ZOOM_LIM_OUT) zoom = ZOOM_LIM_OUT;
+                    if (zoom > ZOOM_LIM_IN) zoom = ZOOM_LIM_IN;
                     cam.set_zoom(zoom);
                 }
                 if (lctrl){
                     rotate += ev.mouse.dz * 0.1;
                 }
-                /* Zoom limits */
-                if (zoom < 0.1) zoom = 0.1;
-                if (zoom > 10) zoom = 10;
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
                 switch(ev.keyboard.keycode) {
@@ -197,6 +200,9 @@ int main(int argc, char const *argv[])
                         break;
                     case ALLEGRO_KEY_A:
                         LEFT = true;
+                        break;
+                    case ALLEGRO_KEY_C:
+                        ship->change_sails_aperture();
                         break;
                     case ALLEGRO_KEY_V:
                         SHOT_VAR = (SHOT_VAR+1) % 3;
