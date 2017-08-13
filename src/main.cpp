@@ -16,8 +16,8 @@
 #include "unit.h"
 #include "camera.h"
 #include "cursor.h"
-#include "unitManager.h"
 #include "weather.h"
+#include "engine.h"
 
 const int FPS = 20;
 // const unsigned int granularity = 50;
@@ -51,6 +51,9 @@ int main(int argc, char const *argv[])
     if (!al_init_ttf_addon()) cerr << "Error initializing ttf\n";
     if (!al_init_primitives_addon()) cerr << "Error initializing primitives\n";
 
+    if (!al_install_mouse()) cerr << "Error instalando mouse\n";
+    if (!al_install_keyboard()) cerr << "Error instalando teclado\n";
+
 
     al_set_new_display_option(ALLEGRO_SINGLE_BUFFER, 1, ALLEGRO_SUGGEST);
     // al_set_new_display_option(ALLEGRO_SAMPLES, 4, ALLEGRO_SUGGEST);
@@ -82,164 +85,13 @@ int main(int argc, char const *argv[])
     SpriteBase::initialize(backbuffer);
     initialize_units();
 
-    // unitManager
-    // unitManager uMgr(/*&uStr, */50);
-    // uMgr.create<Pirate>(200, 200);
-    // uMgr.create<GreenPirate>(400, 400);
-
-    Map map(15, 15);
-    sp<Ship> ship = make_shared<Caravel>(200, 200);
-    map.add_ship(ship);
-    sp<Unit> pirate1 = make_shared<Pirate>();
-    pirate1->set_position(50, 50);
-    ship->add_crew(pirate1);
-    sp<Unit> pirate2 = make_shared<Pirate>();
-    pirate2->set_position(100, 100);
-    ship->add_crew(pirate2);
-
-    int screen_width = al_get_display_width(display);
-    int screen_height = al_get_display_height(display);
-    Camera cam = Camera(screen_width, screen_height);
-    CameraShot shot = SHIP;
-
-    // eventos
-    ALLEGRO_EVENT_QUEUE * events = al_create_event_queue();
-    if (!events) cerr << "Error creando event queue\n";
-    if (!al_install_mouse()) cerr << "Error instalando mouse\n";
-    ALLEGRO_EVENT_SOURCE * mouse = al_get_mouse_event_source();
-    if (!mouse) cerr << "Error creando mouse source\n";
-    al_register_event_source(events, mouse);
-
-    ALLEGRO_TIMER * timer = al_create_timer(1.f/FPS);
-    if (!timer) cerr << "Error creando timer\n";
-    al_register_event_source(events, al_get_display_event_source(display));
-    al_register_event_source(events, al_get_timer_event_source(timer));
-    al_start_timer(timer);
-
-    if (!al_install_keyboard()) cerr << "Error instalando teclado\n";
-    ALLEGRO_EVENT_SOURCE * keyboard = al_get_keyboard_event_source();
-    al_register_event_source(events, keyboard);
-
     ALLEGRO_BITMAP * cursor_map = al_load_bitmap("res/cursor.png");
     cursor raton(cursor_map, display);
 
-    int x=0; int y=0;
-    bool repeat = true;
-    /* Key press */
-    bool shift = false;
-    bool lctrl = false;
-    bool click = false;
-    bool turning_right = false;
-    bool turning_left = false;
-    int SHOT_VAR = 0;
-    const float ZOOM_LIM_OUT = 0.3;
-    const float ZOOM_LIM_IN = 1.2;
+    Engine engine(FPS, display);
+    engine.start();
+    engine.loop();
+    engine.stop();
 
-    /* Camera parameters. */
-    float zoom = 1.0, rotate = 0;
-    float scroll_x, scroll_y;
-    while(repeat) {
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(events, &ev);
-        // if (!ev) cerr << "Error en el mouse event\n";
-        switch(ev.type) {
-            case ALLEGRO_EVENT_TIMER:
-                if (turning_right)
-                    ship->turn_right();
-                    // uMgr.turn_ship_right();
-                if (turning_left)
-                    ship->turn_left();
-                    // uMgr.turn_ship_left();
-                // uMgr.tick(cam, shot);
-                // TODO: consider making camera a singleton instead of passing
-                map.draw(cam);
-                al_flip_display();
-                break;
-            // case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-            //     // std::cerr << ev.mouse.button;
-            //     if (ev.mouse.button == 1) {
-            //         uMgr.left_unclick(ev.mouse.x, ev.mouse.y, shift);
-
-            //     }
-            //     if (ev.mouse.button == 2) {
-            //         uMgr.right_unclick(ev.mouse.x, ev.mouse.y, shift);
-            //     }
-            //     break;
-            // case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-            //     if (ev.mouse.button == 1) {
-            //         uMgr.left_click(ev.mouse.x, ev.mouse.y);
-            //     }
-            //     break;
-            case ALLEGRO_EVENT_MOUSE_AXES:
-                // uMgr.mouse_move(ev.mouse.x, ev.mouse.y);
-                if (!lctrl){
-                    zoom += ev.mouse.dz * 0.1 * zoom;
-                    /* Zoom limits */
-                    if (zoom < ZOOM_LIM_OUT) zoom = ZOOM_LIM_OUT;
-                    if (zoom > ZOOM_LIM_IN) zoom = ZOOM_LIM_IN;
-                    cam.set_zoom(zoom);
-                }
-                if (lctrl){
-                    rotate += ev.mouse.dz * 0.1;
-                }
-                break;
-            case ALLEGRO_EVENT_KEY_DOWN:
-                switch(ev.keyboard.keycode) {
-                    /* Check if Keyboard Modifier Flags is better */
-                    case ALLEGRO_KEY_ESCAPE:
-                        repeat = false;
-                        break;
-                    case ALLEGRO_KEY_LCTRL:
-                        lctrl = true;
-                        break;
-                    case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
-                        shift = true;
-                        break;
-                    case ALLEGRO_KEY_D:
-                        turning_right = true;
-                        break;
-                    case ALLEGRO_KEY_A:
-                        turning_left = true;
-                        break;
-                    case ALLEGRO_KEY_C:
-                        ship->change_sails_aperture();
-                        break;
-                    case ALLEGRO_KEY_V:
-                        cam.change_shot();
-                        break;
-                }
-                break;
-            case ALLEGRO_EVENT_KEY_UP:
-                switch(ev.keyboard.keycode) {
-                    case ALLEGRO_KEY_LCTRL:
-                        lctrl = false;
-                        break;
-                    case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
-                        shift = false;
-                        break;
-                    case ALLEGRO_KEY_A:
-                        turning_left = false;
-                        break;
-                    case ALLEGRO_KEY_D:
-                        turning_right = false;
-                        break;
-                }
-                break;
-            // case ALLEGRO_EVENT_MOUSE_AXES:
-            //     al_clear_to_color(al_map_rgb(0,0,0));
-            //     al_draw_bitmap(img, ev.mouse.x, ev.mouse.y, 0);
-            //     al_flip_display();
-            //     break;
-
-            case ALLEGRO_EVENT_DISPLAY_CLOSE:
-                repeat = false;
-                break;
-        }
-    }
-
-    // al_rest(5.0);
-
-    al_destroy_event_queue(events);
-    al_destroy_display(display);
     return 0;
 }
