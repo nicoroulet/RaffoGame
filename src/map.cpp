@@ -18,7 +18,7 @@ void Map::draw(Camera &camera) {
     // FIXME this is not the right place for this
     al_clear_to_color(al_map_rgb(0, 0, 0));
     camera.set_position(ships[0]->pos_x(), ships[0]->pos_y(), ships[0]->get_rotation());
-    camera.set_transform_fixed_ship_map();
+    camera.set_transform_map();
     // for (auto &row : matrix) {
     //     for (auto &tile : row) {
     //         tile->draw();

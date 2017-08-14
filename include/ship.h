@@ -20,8 +20,7 @@ public:
     int pos_x();
     int pos_y();
     float get_rotation();
-    void turn_left(float rotate);
-    void turn_right(float rotate);
+    void turn(float rotate, int direction);
     void change_sails_aperture();
 protected:
     Ship(int x, int y, sp<Drawable> drawable);
