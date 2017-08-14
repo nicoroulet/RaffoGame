@@ -134,8 +134,6 @@ int main(int argc, char const *argv[])
     int SHOT_VAR = 0;
     const float ZOOM_LIM_OUT = 0.3;
     const float ZOOM_LIM_IN = 1.2;
-    const int LEFT = 1;
-    const int RIGHT = -1;
 
     /* Camera parameters. */
     float zoom = 1.0, rotate = 0;
@@ -147,10 +145,10 @@ int main(int argc, char const *argv[])
         switch(ev.type) {
             case ALLEGRO_EVENT_TIMER:
                 if (turning_right)
-                    ship->turn(0.01, RIGHT);
+                    ship->turn_right();
                     // uMgr.turn_ship_right();
                 if (turning_left)
-                    ship->turn(0.01, LEFT);
+                    ship->turn_left();
                     // uMgr.turn_ship_left();
                 // uMgr.tick(cam, shot);
                 // TODO: consider making camera a singleton instead of passing
