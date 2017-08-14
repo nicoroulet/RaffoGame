@@ -60,7 +60,6 @@ int main(int argc, char const *argv[])
     // al_set_new_display_flags(ALLEGRO_OPENGL);
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
     ALLEGRO_DISPLAY * display = al_create_display(5000, 5000);
-    ALLEGRO_BITMAP * backbuffer = al_get_backbuffer(display);
     // al_reset_clipping_rectangle();
     // al_clear_to_color(al_map_rgb(0,80,0));
     //audio
@@ -80,8 +79,6 @@ int main(int argc, char const *argv[])
     // menu.display(200, 200);
 
     // initialization
-    // TODO: initialize backbuffer for all sprites
-    SpriteBase::initialize(backbuffer);
     initialize_units();
 
     ALLEGRO_BITMAP * cursor_map = al_load_bitmap("res/cursor.png");
