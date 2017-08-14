@@ -72,8 +72,6 @@ public:
 
     void draw(int x, int y, bool selected);
 
-    void clear();
-
     void change_status(Status new_status);
 
     void change_direction(Direction new_direction);
@@ -93,10 +91,6 @@ public:
     virtual ALLEGRO_BITMAP *current_bitmap() = 0;
 
     virtual int current_n_frames() = 0;
-
-    static void initialize(ALLEGRO_BITMAP * backbuff);
-
-    static ALLEGRO_BITMAP * backbuffer;
 
     int frame;
 

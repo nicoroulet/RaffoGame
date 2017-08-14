@@ -31,10 +31,6 @@ void Unit::move(int x, int y) {
     sprite->change_status(WALK);
 }
 
-void Unit::clear() {
-    sprite->clear();
-}
-
 /*
  * Unit is drawn considering (0, 0) is the center of the underlaying ship.
  * An appropriate transform should be used to have a correct drawing.

@@ -13,7 +13,6 @@ public:
     Unit(Unit &u) = delete;
 
     void move(int x, int y);
-    void clear();
     void draw();
     void select();
     void unselect();

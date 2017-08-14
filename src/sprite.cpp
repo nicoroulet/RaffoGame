@@ -12,20 +12,11 @@ SpriteBase::SpriteBase() :
     }
 
 SpriteBase::~SpriteBase() {
-    if (!cleared) clear();
     if (bg) al_destroy_bitmap(bg);
 }
 
 void SpriteBase::draw(int x, int y, bool selected) {
-    // if (!cleared)
-    //     std::cerr << "SpriteBase WARNING: did not call clear before draw\n";
-    cleared = false;
-
-    al_set_target_bitmap(bg);
-    // Save background
-    al_draw_bitmap_region(backbuffer, x, y, framesize, framesize, 0, 0, 0);
     frame = (frame + 1) % current_n_frames();
-    al_set_target_bitmap(backbuffer);
     if (selected) {
         // TODO: extract and parameterize ellipse position logic
         al_draw_ellipse(x + framesize / 2, y + 5 * framesize / 6, framesize/3,
@@ -36,13 +27,6 @@ void SpriteBase::draw(int x, int y, bool selected) {
         current_y_offset(), framesize, framesize, x, y, flag);
     pos_x = x;
     pos_y = y;
-}
-
-void SpriteBase::clear(){
-    // if (cleared) std::cerr << "SpriteBase WARNING: clear called twice\n";
-    cleared = true;
-    al_set_target_bitmap(backbuffer);
-    al_draw_bitmap_region(bg, 0, 0, framesize, framesize, pos_x, pos_y, 0);
 }
 
 void SpriteBase::change_status(Status new_status) {
@@ -82,12 +66,6 @@ ALLEGRO_COLOR SpriteBase::get_pixel(int x, int y) {
 
 rectangle SpriteBase::get_rectangle() {
     return rectangle(pos_y, pos_y + framesize, pos_x, pos_x + framesize);
-}
-
-ALLEGRO_BITMAP *SpriteBase::backbuffer = nullptr;
-
-void SpriteBase::initialize(ALLEGRO_BITMAP *backbuff) {
-    backbuffer = backbuff;
 }
 
 int SpriteBase::current_x_offset() {
