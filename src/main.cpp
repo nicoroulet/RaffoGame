@@ -100,7 +100,7 @@ int main(int argc, char const *argv[])
     int screen_width = al_get_display_width(display);
     int screen_height = al_get_display_height(display);
     Camera cam = Camera(screen_width, screen_height);
-    CameraShot shot = FIX_SHIP;
+    CameraShot shot = SHIP;
 
     // eventos
     ALLEGRO_EVENT_QUEUE * events = al_create_event_queue();
@@ -129,11 +129,13 @@ int main(int argc, char const *argv[])
     bool shift = false;
     bool lctrl = false;
     bool click = false;
-    bool RIGHT = false;
-    bool LEFT = false;
+    bool turning_right = false;
+    bool turning_left = false;
     int SHOT_VAR = 0;
-    float ZOOM_LIM_OUT = 0.3;
-    float ZOOM_LIM_IN = 1.2;
+    const float ZOOM_LIM_OUT = 0.3;
+    const float ZOOM_LIM_IN = 1.2;
+    const int LEFT = 1;
+    const int RIGHT = -1;
 
     /* Camera parameters. */
     float zoom = 1.0, rotate = 0;
@@ -144,11 +146,11 @@ int main(int argc, char const *argv[])
         // if (!ev) cerr << "Error en el mouse event\n";
         switch(ev.type) {
             case ALLEGRO_EVENT_TIMER:
-                if (RIGHT)
-                    ship->turn_right(0.01);
+                if (turning_right)
+                    ship->turn(0.01, RIGHT);
                     // uMgr.turn_ship_right();
-                if (LEFT)
-                    ship->turn_left(0.01);
+                if (turning_left)
+                    ship->turn(0.01, LEFT);
                     // uMgr.turn_ship_left();
                 // uMgr.tick(cam, shot);
                 // TODO: consider making camera a singleton instead of passing
@@ -196,17 +198,16 @@ int main(int argc, char const *argv[])
                         shift = true;
                         break;
                     case ALLEGRO_KEY_D:
-                        RIGHT = true;
+                        turning_right = true;
                         break;
                     case ALLEGRO_KEY_A:
-                        LEFT = true;
+                        turning_left = true;
                         break;
                     case ALLEGRO_KEY_C:
                         ship->change_sails_aperture();
                         break;
                     case ALLEGRO_KEY_V:
-                        SHOT_VAR = (SHOT_VAR+1) % 3;
-                        shot = CameraShot(SHOT_VAR);
+                        cam.change_shot();
                         break;
                 }
                 break;
@@ -219,10 +220,10 @@ int main(int argc, char const *argv[])
                         shift = false;
                         break;
                     case ALLEGRO_KEY_A:
-                        LEFT = false;
+                        turning_left = false;
                         break;
                     case ALLEGRO_KEY_D:
-                        RIGHT = false;
+                        turning_right = false;
                         break;
                 }
                 break;

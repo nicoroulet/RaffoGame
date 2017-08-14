@@ -22,9 +22,8 @@ void Ship::add_crew(sp<Unit> unit) {
 }
 
 void Ship::draw(Camera &camera) {
-    // FIXME: set proper cameras
     move();
-    camera.set_transform_fixed_ship_ship();
+    camera.set_transform_ship();
 
     drawable->draw(- drawable->get_width() / 2, - drawable->get_height() / 2);
     for (auto &unit : crew) {
@@ -57,19 +56,10 @@ void Ship::move() {
     y -= speed * cos(rotation);
 }
 
-void Ship::turn_left(float rotate) {
+void Ship::turn(float rotate, int direction) {
     /* handling could be a Ship modifier */
     float handling = 0.9;
-    rotation += rotate*handling*(0.1*speed);
-    /* Rotation penalty could be a Ship Modifier */
-    float turn_penalty = 0.99;
-    speed *= turn_penalty;
-}
-
-void Ship::turn_right(float rotate) {
-    /* handling could be a Ship modifier */
-    float handling = 0.9;
-    rotation -= rotate*handling*(0.1*speed);
+    rotation += direction*rotate*handling*(0.1*speed);
     /* Rotation penalty could be a Ship Modifier */
     float turn_penalty = 0.99;
     speed *= turn_penalty;
