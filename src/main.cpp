@@ -42,17 +42,16 @@ void initialize_units() {
 
 int main(int argc, char const *argv[])
 {
-    cerr << "al_init\n";
-    if (!al_init()) cerr << "Error initializing allegro\n";
-    if (!al_init_image_addon()) cerr << "Error initializing images\n";
+    CHECK(al_init(), "Failed to initialize allegro");
+    CHECK(al_init_image_addon(), "Failed to initialize images");
     // if (!al_install_audio()) cerr << "Error instalando audio\n";
     // if (!al_init_acodec_addon()) cerr << "Inicializando codecs\n";
     al_init_font_addon();
-    if (!al_init_ttf_addon()) cerr << "Error initializing ttf\n";
-    if (!al_init_primitives_addon()) cerr << "Error initializing primitives\n";
+    CHECK(al_init_ttf_addon(), "Failed to initialize ttf");
+    CHECK(al_init_primitives_addon(), "Failed to initialize primitives");
 
-    if (!al_install_mouse()) cerr << "Error instalando mouse\n";
-    if (!al_install_keyboard()) cerr << "Error instalando teclado\n";
+    CHECK(al_install_mouse(), "Failed to install mouse");
+    CHECK(al_install_keyboard(), "Failed to install keyboard");
 
 
     al_set_new_display_option(ALLEGRO_SINGLE_BUFFER, 1, ALLEGRO_SUGGEST);
