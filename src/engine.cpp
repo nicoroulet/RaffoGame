@@ -19,21 +19,22 @@ const float Engine::ZOOM_LIM_OUT = 0.3;
 
 void Engine::start() {
     events = al_create_event_queue();
-    if (!events) std::cerr << "Engine ERROR: creating event queue\n";
+    // if (!events) std::cerr << "Engine ERROR: creating event queue\n";
+    CHECK(events, "Failed to create event queue");
     mouse = al_get_mouse_event_source();
-    if (!mouse) std::cerr << "Engine ERROR: creating mouse source, did not "
-                             "install mouse subsystem";
+    CHECK(mouse, "Failed to create mouse source, "
+                 "mouse subsystem not installed");
     al_register_event_source(events, mouse);
 
     timer = al_create_timer(1.f/fps);
-    if (!timer) std::cerr << "Error creando timer\n";
+    CHECK(timer, "Failed to create timer");
     al_register_event_source(events, al_get_display_event_source(display));
     al_register_event_source(events, al_get_timer_event_source(timer));
     al_start_timer(timer);
 
     keyboard = al_get_keyboard_event_source();
-    if (!keyboard) std::cerr << "Engine ERROR: creating keyboard source, did "
-                                "not install keyboard subsystem";
+    CHECK(keyboard, "Failed to create keyboard source, "
+                    "keyboard subsystem not installed");
     al_register_event_source(events, keyboard);
 
 }
