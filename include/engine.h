@@ -33,9 +33,6 @@ private:
     bool turning_right;
     bool turning_left;
 
-    const static float ZOOM_LIM_OUT;
-    const static float ZOOM_LIM_IN;
-
     ALLEGRO_EVENT_QUEUE *events;
     ALLEGRO_EVENT_SOURCE *mouse;
     ALLEGRO_TIMER *timer;

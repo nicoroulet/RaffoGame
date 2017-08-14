@@ -17,6 +17,10 @@ void Camera::set_center(Ship *ship) {
 }
 */
 
+const float Camera::ZOOM_LIM_IN = 1.2;
+
+const float Camera::ZOOM_LIM_OUT = 0.3;
+
 void Camera::set_transform_ship() {
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
@@ -55,8 +59,11 @@ void Camera::change_shot() {
     shot = CameraShot((shot + 1) % 2);
 }
 
-void Camera::set_zoom(float scale) {
-    zoom = scale;
+void Camera::change_zoom(float factor) {
+    zoom += factor * 0.1 * zoom;
+    /* Zoom limits */
+    if (zoom < ZOOM_LIM_OUT) zoom = ZOOM_LIM_OUT;
+    if (zoom > ZOOM_LIM_IN) zoom = ZOOM_LIM_IN;
 }
 
 int Camera::get_pos_x() {

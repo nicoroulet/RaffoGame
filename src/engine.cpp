@@ -14,8 +14,6 @@ Engine::Engine(int fps, ALLEGRO_DISPLAY *display) :
     shot{SHIP}
     {}
 
-const float Engine::ZOOM_LIM_IN = 1.2;
-const float Engine::ZOOM_LIM_OUT = 0.3;
 
 void Engine::start() {
     events = al_create_event_queue();
@@ -86,20 +84,7 @@ void Engine::loop() {
             //     }
             //     break;
             case ALLEGRO_EVENT_MOUSE_AXES:
-                // uMgr.mouse_move(ev.mouse.x, ev.mouse.y);
-                if (!lctrl){
-                    zoom += ev.mouse.dz * 0.1 * zoom;
-                    /* Zoom limits */
-                    if (zoom < ZOOM_LIM_OUT) zoom = ZOOM_LIM_OUT;
-                    if (zoom > ZOOM_LIM_IN) zoom = ZOOM_LIM_IN;
-                    camera.set_zoom(zoom);
-                }
-                if (lctrl){
-                    rotate += ev.mouse.dz * 0.1;
-                }
-                /* Zoom limits */
-                if (zoom < 0.1) zoom = 0.1;
-                if (zoom > 10) zoom = 10;
+                camera.change_zoom(ev.mouse.dz);
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
                 switch(ev.keyboard.keycode) {
