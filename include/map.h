@@ -26,13 +26,12 @@ typedef Tile<WaterTilePath> WaterTile;
 
 class Map {
 public:
+    Map();
     Map(int height, int width);
 
     void draw(Camera &camera);
-    void add_ship(sp<Ship> ship);
 private:
     std::vector<std::vector<std::shared_ptr<Drawable>>> matrix;
-    std::vector<sp<Ship>> ships;
     int height;
     int width;
 };

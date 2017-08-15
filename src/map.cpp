@@ -2,6 +2,8 @@
 
 const char *WaterTilePath::path = "res/tiles/water.png";
 
+Map::Map() {}
+
 Map::Map(int height, int width) :
     height(height),
     width(width),
@@ -17,7 +19,6 @@ Map::Map(int height, int width) :
 void Map::draw(Camera &camera) {
     // FIXME this is not the right place for this
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    camera.set_position(ships[0]->pos_x(), ships[0]->pos_y(), ships[0]->get_rotation());
     camera.set_transform_map();
     int tile_size = 512; // TODO unhardcode
     for (int i = 0; i < height; ++i) {
@@ -25,11 +26,4 @@ void Map::draw(Camera &camera) {
             matrix[i][j]->draw(i * tile_size, j * tile_size);
         }
     }
-    for (auto &ship : ships) {
-        ship->draw(camera);
-    }
-}
-
-void Map::add_ship(sp<Ship> ship) {
-    ships.push_back(ship);
 }
