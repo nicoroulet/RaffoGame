@@ -2,6 +2,7 @@
 
 #include "drawable.h"
 #include "camera.h"
+#include "sail.h"
 #include "unit.h"
 
 // TODO: remove later
@@ -29,13 +30,14 @@ protected:
     sp<Drawable> drawable;
     std::vector<sp<Unit>> crew;
 
-    int x, y;
-    float rotation;
-    float goal_speed;
-    float speed;
+    Vector2D position;
+    radians rotation;
+    Vector2D speed;
     int height, width;
-    bool sails_aperture;
-    float sails_efficiency;
+    // bool sails_aperture;
+    // float sails_efficiency;
+
+    std::vector<sp<Sail>> sails;
 };
 
 template <class ShipPath>
@@ -50,4 +52,11 @@ ConcreteShip<ShipPath>::ConcreteShip(int x, int y) :
     Ship(x, y, std::make_shared<SimpleDrawable<ShipPath>>())
     {}
 
-typedef ConcreteShip<CaravelPath> Caravel;
+class Caravel : public ConcreteShip<CaravelPath> {
+public:
+    Caravel(int x, int y) :
+        ConcreteShip<CaravelPath>(x, y)
+        {
+            this->sails.push_back(std::make_shared<SquareSail>());
+        }
+};
