@@ -146,10 +146,10 @@ void Engine::loop() {
     initialize_map();
     while(this->looping) {
         al_wait_for_event(events, &ev);
-        if (ev.type == ALLEGRO_EVENT_TIMER) {
+        if (ev.type == ALLEGRO_EVENT_TIMER)
             manage_timer();
-        }
-        manage_input(ev);
+        else 
+            manage_input(ev);
     }
 }
 
