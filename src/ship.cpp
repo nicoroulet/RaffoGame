@@ -6,15 +6,14 @@
 const char *CaravelPath::path = "res/ships/caravel.png";
 
 Ship::Ship(int x, int y, sp<Drawable> drawable) :
-    x(x),
-    y(y),
+    position(x, y),
     drawable(drawable),
     rotation(0),
-    speed(30),
+    speed(0, 30),
     height(0),
-    width(0),
-    sails_aperture(true),
-    sails_efficiency(1)
+    width(0)
+    // sails_aperture(true),
+    // sails_efficiency(1)
     {}
 
 void Ship::add_crew(sp<Unit> unit) {
@@ -32,15 +31,16 @@ void Ship::draw(Camera &camera) {
 }
 
 void Ship::move() {
-    /* Difference between Ship speed and Wind speed 
-    proportional to the angle of the ship to the wind 
+#if 0
+    /* Difference between Ship speed and Wind speed
+    proportional to the angle of the ship to the wind
     This calculation could change depending type of sails */
     int w_speed = Weather::wind_speed;
     radians w_direction = Weather::wind_direction;
     float push = (w_speed - speed) * (cos(w_direction - rotation) + 1) / 2;
     /* Hull drag could be a Ship modifier */
     float drag = 0.05;
-    /* Sails could be a Ship Modifier 
+    /* Sails could be a Ship Modifier
     * Change Rate could depend on crew manning sails
     */
     float sails_type = 0.8;
@@ -49,11 +49,23 @@ void Ship::move() {
     sails_efficiency += (sails_aperture - sails_efficiency) * sails_change_rate;
     /* New speed with inertia */
     float acceleration = 0.02;
-    goal_speed = (1 - drag) * sails_type * (speed + push * sails_efficiency);
+    float goal_speed = (1 - drag) * sails_type * (speed + push * sails_efficiency);
     speed += (goal_speed-speed)*acceleration;
+#endif
+    Vector2D push;
+    for (auto &sail : sails) {
+        push += sail->calculate_push(this->rotation);
+    }
+    Vector2D drag(speed * -0.01);
 
-    x -= speed * sin(rotation);
-    y -= speed * cos(rotation);
+    DBG(push);
+    DBG(norm(push));
+    DBG(drag);
+    DBG(norm(drag));
+    speed += push + drag;
+    position += rotate(speed, this->rotation);
+    // x -= speed * sin(rotation);
+    // y -= speed * cos(rotation);
 }
 
 void Ship::turn_left() {
@@ -67,22 +79,22 @@ void Ship::turn_right() {
 void Ship::turn(float rotate) {
     /* handling could be a Ship modifier */
     float handling = 0.9;
-    rotation += rotate * handling * (0.1 * speed);
+    rotation += rotate * handling * (0.1 * norm(speed));
     /* Rotation penalty could be a Ship Modifier */
     float turn_penalty = 0.99;
     speed *= turn_penalty;
 }
 
 void Ship::change_sails_aperture() {
-  sails_aperture = !sails_aperture;
-} 
+  // sails_aperture = !sails_aperture;
+}
 
 int Ship::pos_x() {
-    return x;
+    return position.x;
 }
 
 int Ship::pos_y() {
-    return y;
+    return position.y;
 }
 
 float Ship::get_rotation() {

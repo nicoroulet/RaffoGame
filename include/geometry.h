@@ -1,9 +1,12 @@
 #pragma once
 
-#include <iostream>
+#include "helpers.h"
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
+#include <iostream>
+#include <math.h>
 
 #define MAX(x,y) (x < y? y : x)
 #define MIN(x,y) (x > y? y : x)
@@ -37,3 +40,68 @@ public:
     void clear();
 
 };
+
+
+struct Vector2D {
+    float x;
+    float y;
+
+    Vector2D(float x = 0, float y = 0): x(x), y(y) {}
+
+    Vector2D& operator=(const Vector2D &p) {
+        x = p.x;
+        y = p.y;
+        return *this;
+    }
+
+    inline bool operator==(const Vector2D &p) const {
+        return (x == p.x) && (y == p.y);
+    }
+
+    inline Vector2D operator+=(const Vector2D &p) {
+        x += p.x;
+        y += p.y;
+        return *this;
+    }
+
+    inline Vector2D operator*=(float scalar) {
+        x *= scalar;
+        y *= scalar;
+        return *this;
+    }
+
+    friend std::ostream& operator<< (std::ostream& stream, const Vector2D& v) {
+        stream << "(" << v.x << ", " << v.y << ")";
+        return stream;
+    }
+};
+
+inline Vector2D rotate(const Vector2D &vect, radians angle) {
+    float sine = sin(angle);
+    float cosine = cos(angle);
+    return Vector2D(vect.x * cosine - vect.y * sine,
+                    vect.x * sine + vect.y * cosine);
+}
+
+inline Vector2D unit_vector(radians angle) {
+    return Vector2D(sin(angle), cos(angle));
+}
+
+/*
+ * Scalar product for Vector2D
+ */
+inline Vector2D operator*(const Vector2D &p, float scalar) {
+    return Vector2D(p.x * scalar, p.y * scalar);
+}
+
+inline Vector2D operator*(float scalar, const Vector2D &p) {
+    return Vector2D(p.x * scalar, p.y * scalar);
+}
+
+inline Vector2D operator+(const Vector2D &p1, const Vector2D &p2) {
+    return Vector2D(p1.x + p2.x, p1.y + p2.y);
+}
+
+inline float norm(const Vector2D &v) {
+    return sqrt(v.x * v.x + v.y * v.y);
+}
