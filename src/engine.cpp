@@ -10,6 +10,7 @@ Engine::Engine(int fps, ALLEGRO_DISPLAY *display) :
     click{false},
     turning_right{false},
     turning_left{false},
+    looping{true},
     camera(window_width, window_height),
     shot{SHIP}
     {}
@@ -67,15 +68,13 @@ void Engine::manage_input(ALLEGRO_EVENT &ev) {
             //     }
             //     break;
             case ALLEGRO_EVENT_MOUSE_AXES:
-                std::cout << "change_zoom" << std::endl;
                 this->camera.change_zoom(ev.mouse.dz);
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
-                std::cout << "key_down" << std::endl;
                 switch(ev.keyboard.keycode) {
                     /* Check if Keyboard Modifier Flags is better */
                     case ALLEGRO_KEY_ESCAPE:
-                        return;
+                        this->looping = false;
                     case ALLEGRO_KEY_LCTRL:
                         lctrl = true;
                         break;
@@ -87,6 +86,7 @@ void Engine::manage_input(ALLEGRO_EVENT &ev) {
                         break;
                     case ALLEGRO_KEY_C:
                         this->main_ship->change_sails_aperture();
+                        break;
                     case ALLEGRO_KEY_A:
                         turning_left = true;
                         break;
@@ -119,7 +119,7 @@ void Engine::manage_input(ALLEGRO_EVENT &ev) {
         // if (!ev) cerr << "Error en el mouse event\n";
 
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
-                return;
+                this->looping = false;
         }
 }
 
@@ -144,12 +144,12 @@ void Engine::manage_timer() {
 void Engine::loop() {
     ALLEGRO_EVENT ev;
     initialize_map();
-    while(true) {
+    while(this->looping) {
         al_wait_for_event(events, &ev);
         if (ev.type == ALLEGRO_EVENT_TIMER) {
             manage_timer();
-        manage_input(ev);
         }
+        manage_input(ev);
     }
 }
 
