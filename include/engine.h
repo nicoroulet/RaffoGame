@@ -37,6 +37,7 @@ private:
     bool click;
     bool turning_right;
     bool turning_left;
+    bool looping;
 
     ALLEGRO_EVENT last_ev;
     ALLEGRO_EVENT_QUEUE *events;
