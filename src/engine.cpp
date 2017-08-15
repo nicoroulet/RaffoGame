@@ -37,37 +37,20 @@ void Engine::start() {
 
 }
 
-void Engine::loop() {
-
-    // FIXME: this should be elsewhere
-    Map map(15, 15);
-    sp<Ship> ship = std::make_shared<Caravel>(200, 200);
-    map.add_ship(ship);
+void Engine::initialize_map() {
+    this->map = Map(15, 15);
+    this->main_ship = std::make_shared<Caravel>(200, 200);
+    add_ship(this->main_ship);
     sp<Unit> pirate1 = std::make_shared<Pirate>();
-    pirate1->set_position(50, 50);
-    ship->add_crew(pirate1);
+    pirate1->set_position(25, 25);
+    this->main_ship->add_crew(pirate1);
     sp<Unit> pirate2 = std::make_shared<Pirate>();
-    pirate2->set_position(100, 100);
-    ship->add_crew(pirate2);
+    pirate2->set_position(-50, -50);
+    this->main_ship->add_crew(pirate2);
+}
 
-    int SHOT_VAR = 0;
-    float zoom = 1.0, rotate = 0;
-    while(true) {
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(events, &ev);
-        // if (!ev) cerr << "Error en el mouse event\n";
-        switch(ev.type) {
-            case ALLEGRO_EVENT_TIMER:
-                if (turning_right)
-                    ship->turn_right();
-                if (turning_left)
-                    ship->turn_left();
-                    // uMgr.turn_ship_left();
-                // uMgr.tick(camera, shot);
-                // TODO: consider making camera a singleton instead of passing
-                map.draw(camera);
-                al_flip_display();
-                break;
+void Engine::manage_input(ALLEGRO_EVENT &ev) {
+    switch(ev.type) {
             // case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
             //     // std::cerr << ev.mouse.button;
             //     if (ev.mouse.button == 1) {
@@ -84,9 +67,11 @@ void Engine::loop() {
             //     }
             //     break;
             case ALLEGRO_EVENT_MOUSE_AXES:
-                camera.change_zoom(ev.mouse.dz);
+                std::cout << "change_zoom" << std::endl;
+                this->camera.change_zoom(ev.mouse.dz);
                 break;
             case ALLEGRO_EVENT_KEY_DOWN:
+                std::cout << "key_down" << std::endl;
                 switch(ev.keyboard.keycode) {
                     /* Check if Keyboard Modifier Flags is better */
                     case ALLEGRO_KEY_ESCAPE:
@@ -101,12 +86,12 @@ void Engine::loop() {
                         turning_right = true;
                         break;
                     case ALLEGRO_KEY_C:
-                        ship->change_sails_aperture();
+                        this->main_ship->change_sails_aperture();
                     case ALLEGRO_KEY_A:
                         turning_left = true;
                         break;
                     case ALLEGRO_KEY_V:
-                        camera.change_shot();
+                        this->camera.change_shot();
                         break;
                 }
                 break;
@@ -131,9 +116,39 @@ void Engine::loop() {
             //     al_draw_bitmap(img, ev.mouse.x, ev.mouse.y, 0);
             //     al_flip_display();
             //     break;
+        // if (!ev) cerr << "Error en el mouse event\n";
 
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 return;
+        }
+}
+
+void Engine::manage_timer() {
+    if (turning_right)
+        this->main_ship->turn_right();
+    if (turning_left)
+        this->main_ship->turn_left();
+    // TODO: consider making camera a singleton instead of passing
+
+    /* DRAWING */
+    this->camera.set_position(this->main_ship->pos_x(),
+                              this->main_ship->pos_y(),
+                              this->main_ship->get_rotation());
+    this->map.draw(this->camera);
+    for (auto &ship : this->ships) {
+        ship->draw(this->camera);
+    }
+    al_flip_display();
+}
+
+void Engine::loop() {
+    ALLEGRO_EVENT ev;
+    initialize_map();
+    while(true) {
+        al_wait_for_event(events, &ev);
+        if (ev.type == ALLEGRO_EVENT_TIMER) {
+            manage_timer();
+        manage_input(ev);
         }
     }
 }
@@ -141,4 +156,8 @@ void Engine::loop() {
 void Engine::stop() {
     al_destroy_event_queue(events);
     al_destroy_display(display);
+}
+
+void Engine::add_ship(sp<Ship> ship) {
+    ships.push_back(ship);
 }
