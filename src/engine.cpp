@@ -84,8 +84,11 @@ void Engine::manage_input(ALLEGRO_EVENT &ev) {
                     case ALLEGRO_KEY_D:
                         turning_right = true;
                         break;
-                    case ALLEGRO_KEY_C:
-                        this->main_ship->change_sails_aperture();
+                    case ALLEGRO_KEY_W:
+                        this->main_ship->spread_sails();
+                        break;
+                    case ALLEGRO_KEY_S:
+                        this->main_ship->lower_sails();
                         break;
                     case ALLEGRO_KEY_A:
                         turning_left = true;
@@ -148,7 +151,7 @@ void Engine::loop() {
         al_wait_for_event(events, &ev);
         if (ev.type == ALLEGRO_EVENT_TIMER)
             manage_timer();
-        else 
+        else
             manage_input(ev);
     }
 }

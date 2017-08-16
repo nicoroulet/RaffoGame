@@ -58,11 +58,11 @@ void Ship::move() {
     }
     Vector2D drag(speed * -0.01);
 
-    DBG(push);
-    DBG(norm(push));
-    DBG(drag);
-    DBG(norm(drag));
-    DBG(projection(Vector2D(1,0), Vector2D(1,1)));
+    // DBG(push);
+    // DBG(norm(push));
+    // DBG(drag);
+    // DBG(norm(drag));
+    // DBG(projection(Vector2D(1,0), Vector2D(1,1)));
     speed += push + drag;
     position += speed;
     // x -= speed * sin(rotation);
@@ -87,8 +87,16 @@ void Ship::turn(float rotation) {
     speed *= turn_penalty;
 }
 
-void Ship::change_sails_aperture() {
-  // sails_aperture = !sails_aperture;
+void Ship::spread_sails() {
+    for (auto &sail : sails) {
+        sail->spread_sail();
+    }
+}
+
+void Ship::lower_sails() {
+    for (auto &sail : sails) {
+        sail->lower_sail();
+    }
 }
 
 int Ship::pos_x() {
