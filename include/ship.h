@@ -31,7 +31,8 @@ protected:
     std::vector<sp<Unit>> crew;
 
     Vector2D position;
-    radians rotation;
+    Vector2D direction;
+    // radians rotation;
     Vector2D speed;
     int height, width;
     // bool sails_aperture;

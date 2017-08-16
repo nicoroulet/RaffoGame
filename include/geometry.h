@@ -41,7 +41,6 @@ public:
 
 };
 
-
 struct Vector2D {
     float x;
     float y;
@@ -104,4 +103,18 @@ inline Vector2D operator+(const Vector2D &p1, const Vector2D &p2) {
 
 inline float norm(const Vector2D &v) {
     return sqrt(v.x * v.x + v.y * v.y);
+}
+
+/*
+ * Inner product
+ */
+inline float dot(const Vector2D &v1, const Vector2D &v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
+/*
+ * Computes the projection of vector a into vector b
+ */
+inline Vector2D projection(const Vector2D &a, const Vector2D &b) {
+    return b * (dot(b, a) / dot(b, b));
 }
