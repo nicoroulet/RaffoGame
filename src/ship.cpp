@@ -8,7 +8,7 @@ const char *CaravelPath::path = "res/ships/caravel.png";
 Ship::Ship(int x, int y, sp<Drawable> drawable) :
     position(x, y),
     drawable(drawable),
-    rotation(0),
+    direction(unit_vector(3.14)),
     speed(0, 30),
     height(0),
     width(0)
@@ -52,9 +52,9 @@ void Ship::move() {
     float goal_speed = (1 - drag) * sails_type * (speed + push * sails_efficiency);
     speed += (goal_speed-speed)*acceleration;
 #endif
-    Vector2D push;
+    Vector2D push(0, 0);
     for (auto &sail : sails) {
-        push += sail->calculate_push(this->rotation);
+        push += sail->calculate_push(this->direction);
     }
     Vector2D drag(speed * -0.01);
 
@@ -62,24 +62,26 @@ void Ship::move() {
     DBG(norm(push));
     DBG(drag);
     DBG(norm(drag));
+    DBG(projection(Vector2D(1,0), Vector2D(1,1)));
     speed += push + drag;
-    position += rotate(speed, this->rotation);
+    position += speed;
     // x -= speed * sin(rotation);
     // y -= speed * cos(rotation);
 }
 
 void Ship::turn_left() {
-    turn(0.01);
-}
-
-void Ship::turn_right() {
     turn(-0.01);
 }
 
-void Ship::turn(float rotate) {
+void Ship::turn_right() {
+    turn(0.01);
+}
+
+void Ship::turn(float rotation) {
     /* handling could be a Ship modifier */
     float handling = 0.9;
-    rotation += rotate * handling * (0.1 * norm(speed));
+    direction = rotate(direction, rotation * handling * (0.1 * norm(speed)));
+    speed = rotate(speed, rotation * handling * (0.1 * norm(speed)));
     /* Rotation penalty could be a Ship Modifier */
     float turn_penalty = 0.99;
     speed *= turn_penalty;
@@ -98,5 +100,5 @@ int Ship::pos_y() {
 }
 
 float Ship::get_rotation() {
-    return rotation;
+    return atan2(direction.x, direction.y);
 }

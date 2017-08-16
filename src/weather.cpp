@@ -1,5 +1,6 @@
 #include "weather.h"
 #include "helpers.h"
 
-int Weather::wind_speed = 100;
-radians Weather::wind_direction = 0;
+Vector2D Weather::wind(0, 3);
+// int Weather::wind_speed = 100;
+// radians Weather::wind_direction = 0;

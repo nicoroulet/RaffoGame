@@ -11,7 +11,7 @@ public:
     /*
      * Compute push vector, relative to the ship's direction.
      */
-    virtual Vector2D calculate_push(radians ship_direction) = 0;
+    virtual Vector2D calculate_push(const Vector2D &ship_direction) = 0;
     void lower_sail();
     void spread_sail();
 protected:
@@ -39,5 +39,5 @@ protected:
 
 class SquareSail : public Sail {
 public:
-    virtual Vector2D calculate_push(radians ship_direction) override;
+    virtual Vector2D calculate_push(const Vector2D &ship_direction) override;
 };
