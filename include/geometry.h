@@ -69,6 +69,10 @@ struct Vector2D {
         return *this;
     }
 
+    inline Vector2D operator-() const {
+        return Vector2D(-x, -y);
+    }
+
     friend std::ostream& operator<< (std::ostream& stream, const Vector2D& v) {
         stream << "(" << v.x << ", " << v.y << ")";
         return stream;
@@ -86,6 +90,10 @@ inline Vector2D unit_vector(radians angle) {
     return Vector2D(sin(angle), cos(angle));
 }
 
+inline Vector2D perpendicular_vector(const Vector2D &v) {
+    return Vector2D(v.y, -v.x);
+}
+
 /*
  * Scalar product for Vector2D
  */
@@ -99,6 +107,10 @@ inline Vector2D operator*(float scalar, const Vector2D &p) {
 
 inline Vector2D operator+(const Vector2D &p1, const Vector2D &p2) {
     return Vector2D(p1.x + p2.x, p1.y + p2.y);
+}
+
+inline Vector2D operator-(const Vector2D &p1, const Vector2D &p2) {
+    return Vector2D(p1.x - p2.x, p1.y - p2.y);
 }
 
 inline float norm(const Vector2D &v) {

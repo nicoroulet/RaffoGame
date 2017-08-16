@@ -31,42 +31,15 @@ void Ship::draw(Camera &camera) {
 }
 
 void Ship::move() {
-#if 0
-    /* Difference between Ship speed and Wind speed
-    proportional to the angle of the ship to the wind
-    This calculation could change depending type of sails */
-    int w_speed = Weather::wind_speed;
-    radians w_direction = Weather::wind_direction;
-    float push = (w_speed - speed) * (cos(w_direction - rotation) + 1) / 2;
-    /* Hull drag could be a Ship modifier */
-    float drag = 0.05;
-    /* Sails could be a Ship Modifier
-    * Change Rate could depend on crew manning sails
-    */
-    float sails_type = 0.8;
-    float sails_change_rate = 0.1;
-    /* Sails calculation */
-    sails_efficiency += (sails_aperture - sails_efficiency) * sails_change_rate;
-    /* New speed with inertia */
-    float acceleration = 0.02;
-    float goal_speed = (1 - drag) * sails_type * (speed + push * sails_efficiency);
-    speed += (goal_speed-speed)*acceleration;
-#endif
+    // TODO: missing sails change rate
     Vector2D push(0, 0);
     for (auto &sail : sails) {
         push += sail->calculate_push(this->direction);
     }
     Vector2D drag(speed * -0.01);
 
-    // DBG(push);
-    // DBG(norm(push));
-    // DBG(drag);
-    // DBG(norm(drag));
-    // DBG(projection(Vector2D(1,0), Vector2D(1,1)));
-    speed += push + drag;
+    speed += push + drag + calculate_keel_force();
     position += speed;
-    // x -= speed * sin(rotation);
-    // y -= speed * cos(rotation);
 }
 
 void Ship::turn_left() {
@@ -80,8 +53,8 @@ void Ship::turn_right() {
 void Ship::turn(float rotation) {
     /* handling could be a Ship modifier */
     float handling = 0.9;
-    direction = rotate(direction, rotation * handling * (0.1 * norm(speed)));
-    speed = rotate(speed, rotation * handling * (0.1 * norm(speed)));
+    direction = rotate(this->direction,
+                       rotation * handling * (0.1 * norm(this->speed)));
     /* Rotation penalty could be a Ship Modifier */
     float turn_penalty = 0.99;
     speed *= turn_penalty;
@@ -109,4 +82,8 @@ int Ship::pos_y() {
 
 float Ship::get_rotation() {
     return atan2(direction.x, direction.y);
+}
+
+Vector2D Ship::calculate_keel_force() {
+    return projection(this->speed, this->direction) - this->speed;
 }

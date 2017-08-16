@@ -28,6 +28,9 @@ public:
 protected:
     void turn(float rotate);
     Ship(int x, int y, sp<Drawable> drawable);
+
+    Vector2D calculate_keel_force();
+
     sp<Drawable> drawable;
     std::vector<sp<Unit>> crew;
 
