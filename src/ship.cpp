@@ -34,9 +34,9 @@ void Ship::move() {
     // TODO: missing sails change rate
     Vector2D push(0, 0);
     for (auto &sail : sails) {
-        push += sail->calculate_push(this->direction);
+        push += sail->calculate_push(this->direction, this->speed);
     }
-    Vector2D drag(speed * -0.01);
+    Vector2D drag(speed * -0.005);
 
     speed += push + drag + calculate_keel_force();
     position += speed;
@@ -56,7 +56,7 @@ void Ship::turn(float rotation) {
     direction = rotate(this->direction,
                        rotation * handling * (0.1 * norm(this->speed)));
     /* Rotation penalty could be a Ship Modifier */
-    float turn_penalty = 0.99;
+    float turn_penalty = 0.995;
     speed *= turn_penalty;
 }
 
