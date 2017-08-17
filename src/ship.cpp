@@ -36,7 +36,7 @@ void Ship::move() {
     for (auto &sail : sails) {
         push += sail->calculate_push(this->direction, this->speed);
     }
-    Vector2D drag(speed * -0.005);
+    Vector2D drag(speed * -0.01);
 
     speed += push + drag + calculate_keel_force();
     position += speed;
@@ -55,9 +55,6 @@ void Ship::turn(float rotation) {
     float handling = 0.9;
     direction = rotate(this->direction,
                        rotation * handling * (0.1 * norm(this->speed)));
-    /* Rotation penalty could be a Ship Modifier */
-    float turn_penalty = 0.995;
-    speed *= turn_penalty;
 }
 
 void Ship::spread_sails() {

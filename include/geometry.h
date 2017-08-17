@@ -1,6 +1,7 @@
 #pragma once
 
 #include "helpers.h"
+#include "fastsqrt.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -114,7 +115,7 @@ inline Vector2D operator-(const Vector2D &p1, const Vector2D &p2) {
 }
 
 inline float norm(const Vector2D &v) {
-    return sqrt(v.x * v.x + v.y * v.y);
+    return fastsqrt(v.x * v.x + v.y * v.y);
 }
 
 /*
