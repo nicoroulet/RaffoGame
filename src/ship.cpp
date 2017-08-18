@@ -11,7 +11,9 @@ Ship::Ship(int x, int y, sp<Drawable> drawable) :
     direction(unit_vector(3.14)),
     speed(0, 30),
     height(0),
-    width(0)
+    width(0),
+    // TODO check mass magnitude
+    mass(100.0)
     // sails_aperture(true),
     // sails_efficiency(1)
     {}
@@ -38,7 +40,10 @@ void Ship::move() {
     }
     Vector2D drag(speed * -0.01);
 
-    speed += push + drag + calculate_keel_force();
+    Vector2D net_force = push + drag;
+    Vector2D acceleration = net_force * (1 / mass);
+    // TODO check logic behind keel acceleration/force
+    speed += acceleration + calculate_keel_force();
     position += speed;
 }
 
