@@ -39,6 +39,7 @@ protected:
     // radians rotation;
     Vector2D speed;
     int height, width;
+    float mass;
     // bool sails_aperture;
     // float sails_efficiency;
 
