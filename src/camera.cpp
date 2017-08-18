@@ -22,7 +22,6 @@ const float Camera::ZOOM_LIM_IN = 1.2;
 const float Camera::ZOOM_LIM_OUT = 0.3;
 
 void Camera::set_transform_ship() {
-    ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
     al_scale_transform(&transform, zoom, zoom);
     if (shot == MAP) {
@@ -34,7 +33,6 @@ void Camera::set_transform_ship() {
 
 
 void Camera::set_transform_map() {
-    ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
     al_translate_transform(&transform, -pos_x, -pos_y);
     if (shot == SHIP) {
@@ -42,6 +40,11 @@ void Camera::set_transform_map() {
     }
     al_scale_transform(&transform, zoom, zoom);
     al_translate_transform(&transform, screen_width * 0.5, screen_height * 0.5);
+    al_use_transform(&transform);
+}
+
+void Camera::set_transform_identity() {
+    al_identity_transform(&transform);
     al_use_transform(&transform);
 }
 
@@ -66,9 +69,17 @@ void Camera::change_zoom(float factor) {
     if (zoom > ZOOM_LIM_IN) zoom = ZOOM_LIM_IN;
 }
 
-int Camera::get_pos_x() {
+int Camera::get_pos_x() const {
     return pos_x;
 }
-int Camera::get_pos_y() {
+
+int Camera::get_pos_y() const {
     return pos_y;
+}
+
+radians Camera::get_rotation() const {
+    if (shot == MAP) {
+        return 0;
+    }
+    return rotation;
 }

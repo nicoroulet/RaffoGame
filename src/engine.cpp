@@ -12,7 +12,8 @@ Engine::Engine(int fps, ALLEGRO_DISPLAY *display) :
     turning_left{false},
     looping{true},
     camera(window_width, window_height),
-    shot{SHIP}
+    shot{SHIP},
+    hud(window_width, window_height, camera)
     {}
 
 
@@ -141,6 +142,7 @@ void Engine::manage_timer() {
     for (auto &ship : this->ships) {
         ship->draw(this->camera);
     }
+    hud.draw(this->camera);
     al_flip_display();
 }
 
