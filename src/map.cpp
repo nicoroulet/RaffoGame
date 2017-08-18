@@ -21,9 +21,33 @@ void Map::draw(Camera &camera) {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     camera.set_transform_map();
     int tile_size = 512; // TODO unhardcode
+    // number of tile column where the camera is centered
+    int cam_tile_x = camera.get_pos_x() / tile_size;
+    // number of tile row where the camera is centered
+    int cam_tile_y = camera.get_pos_y() / tile_size;
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
-            matrix[i][j]->draw(i * tile_size, j * tile_size);
+            /* Infinite map.
+             * Wraps map rows and columns module width and height respectively,
+             * closest tho cam_tile_x and cam_tile_y.
+             * That is, draw width / 2 columns to the left and width / 2 to the
+             * right (+-1), and the same with rows.
+             */
+            int x = j + (cam_tile_x / width) * width;
+            if (x < cam_tile_x - width / 2) {
+                x += width;
+            }
+            if (x > cam_tile_x + width / 2) {
+                x -= width;
+            }
+            int y = i + (cam_tile_y / height) * height;
+            if (y < cam_tile_y - height / 2) {
+                y += height;
+            }
+            if (y > cam_tile_y + height / 2) {
+                y -= height;
+            }
+            matrix[i][j]->draw(x * tile_size, y * tile_size);
         }
     }
 }
