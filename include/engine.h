@@ -1,6 +1,7 @@
 #pragma once
 
 #include "camera.h"
+#include "hud.h"
 #include "map.h"
 #include "ship.h"
 #include "unit.h"
@@ -51,4 +52,6 @@ private:
 
     Camera camera;
     CameraShot shot;
+
+    HUD hud;
 };

@@ -91,6 +91,29 @@ void SimpleDrawable<BitmapPath>::draw(int x, int y) {
     al_draw_bitmap(this->bitmap, x, y, 0);
 }
 
+template <class BitmapPath>
+class RotableDrawable : public SimpleDrawable<BitmapPath> {
+public:
+    RotableDrawable();
+    void draw(int x, int y, radians rotation);
+};
+
+
+template <class BitmapPath>
+RotableDrawable<BitmapPath>::RotableDrawable() {}
+
+template <class BitmapPath>
+void RotableDrawable<BitmapPath>::draw(int x, int y, radians rotation) {
+    int center_x = this->width / 2;
+    int center_y = this->height / 2;
+    al_draw_rotated_bitmap(this->bitmap, center_x, center_y,
+                           x + center_x, y + center_y,
+                           rotation,
+                           0);
+}
+
+
+
 // template <class BitmapPath>
 // int SimpleDrawable<BitmapPath>::pos_x() {
 //   return x;

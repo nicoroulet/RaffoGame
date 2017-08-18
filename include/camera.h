@@ -17,11 +17,13 @@ public:
     //Camera &operator=(const Camera &) = delete;
 
     //void set_center(Ship *ship);
-    int get_pos_x();
-    int get_pos_y();
+    int get_pos_x() const;
+    int get_pos_y() const;
+    radians get_rotation() const;
     void set_position(int x, int y, float rotate);
     void set_transform_ship();
     void set_transform_map();
+    void set_transform_identity();
     void change_zoom(float factor);
     void change_shot();
 

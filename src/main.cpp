@@ -16,6 +16,7 @@
 #include "unit.h"
 #include "camera.h"
 #include "cursor.h"
+#include "hud.h"
 #include "weather.h"
 #include "engine.h"
 
@@ -48,7 +49,7 @@ ALLEGRO_DISPLAY *create_display() {
     ALLEGRO_DISPLAY *display = al_create_display(5000, 5000);
 }
 
-void initialize_units() {
+void initialize_bitmaps() {
     // TODO add a compile time list of initializables to avoid this
     // highly error-prone initialization method
     PirateBitmap::initialize();
@@ -56,6 +57,8 @@ void initialize_units() {
 
     WaterTile::initialize();
     SimpleDrawable<CaravelPath>::initialize();
+
+    HUD::Compass::initialize();
 }
 
 // al_reset_clipping_rectangle();
@@ -82,7 +85,7 @@ int main(int argc, char const *argv[])
     ALLEGRO_DISPLAY *display = create_display();
 
     // initialization
-    initialize_units();
+    initialize_bitmaps();
 
     ALLEGRO_BITMAP * cursor_map = al_load_bitmap("res/cursor.png");
     cursor raton(cursor_map, display);
