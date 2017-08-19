@@ -13,7 +13,7 @@ Ship::Ship(int x, int y, sp<Drawable> drawable) :
     height(0),
     width(0),
     // TODO check mass magnitude
-    mass(100.0)
+    mass(50.0)
     // sails_aperture(true),
     // sails_efficiency(1)
     {}
@@ -38,7 +38,7 @@ void Ship::move() {
     for (auto &sail : sails) {
         push += sail->calculate_push(this->direction, this->speed);
     }
-    Vector2D drag(speed * -0.01);
+    Vector2D drag(speed * -0.2);
 
     Vector2D net_force = push + drag;
     Vector2D acceleration = net_force * (1 / mass);

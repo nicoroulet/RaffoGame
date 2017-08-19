@@ -18,7 +18,7 @@ Map::Map(int height, int width) :
 
 void Map::draw(Camera &camera) {
     // FIXME this is not the right place for this
-    al_clear_to_color(al_map_rgb(0, 0, 0));
+    // al_clear_to_color(al_map_rgb(0, 0, 0));
     camera.set_transform_map();
     int tile_size = 512; // TODO unhardcode
     // number of tile column where the camera is centered
@@ -34,17 +34,17 @@ void Map::draw(Camera &camera) {
              * right (+-1), and the same with rows.
              */
             int x = j + (cam_tile_x / width) * width;
+            if (cam_tile_x < 0) x -= width;
             if (x < cam_tile_x - width / 2) {
                 x += width;
-            }
-            if (x > cam_tile_x + width / 2) {
+            } else if (x > cam_tile_x + width / 2) {
                 x -= width;
             }
             int y = i + (cam_tile_y / height) * height;
+            if (cam_tile_y < 0) y -= height;
             if (y < cam_tile_y - height / 2) {
                 y += height;
-            }
-            if (y > cam_tile_y + height / 2) {
+            } else if (y > cam_tile_y + height / 2) {
                 y -= height;
             }
             matrix[i][j]->draw(x * tile_size, y * tile_size);

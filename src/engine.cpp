@@ -40,7 +40,7 @@ void Engine::start() {
 }
 
 void Engine::initialize_map() {
-    this->map = Map(15, 15);
+    this->map = Map(18, 18);
     this->main_ship = std::make_shared<Caravel>(200, 200);
     add_ship(this->main_ship);
     sp<Unit> pirate1 = std::make_shared<Pirate>();
