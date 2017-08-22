@@ -34,10 +34,13 @@ void Ship::draw(Camera &camera) {
 
 void Ship::move() {
     // TODO: missing sails change rate
+    float hull_wind_resistance = 0.2;
+    Vector2D relative_wind = Weather::wind - this->speed;
     Vector2D push(0, 0);
     for (auto &sail : sails) {
-        push += sail->calculate_push(this->direction, this->speed);
+        push += sail->calculate_push(this->direction, relative_wind);
     }
+    push += relative_wind * hull_wind_resistance;
     Vector2D drag(speed * -0.2);
 
     Vector2D net_force = push + drag;

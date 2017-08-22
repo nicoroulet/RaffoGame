@@ -18,9 +18,15 @@ void Sail::spread_sail() {
 }
 
 Vector2D SquareSail::calculate_push(const Vector2D &ship_direction,
-                                    const Vector2D &ship_speed) {
+                                    const Vector2D &relative_wind) {
     Vector2D sail_direction = rotate(ship_direction, this->angle);
-    Vector2D relative_wind = Weather::wind - ship_speed;
     return projection(relative_wind, sail_direction) * this->efficiency
                                                      * this->spread;
+}
+
+Vector2D TriangleSail::calculate_push(const Vector2D &ship_direction,
+                                    const Vector2D &relative_wind) {
+    Vector2D deviated_wind = ship_direction *
+                             (norm(relative_wind) / norm(ship_direction));
+    return (relative_wind - deviated_wind) * this->efficiency * this->spread;
 }

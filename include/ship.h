@@ -63,6 +63,6 @@ public:
     Caravel(int x, int y) :
         ConcreteShip<CaravelPath>(x, y)
         {
-            this->sails.push_back(std::make_shared<SquareSail>());
+            this->sails.push_back(std::make_shared<TriangleSail>());
         }
 };
