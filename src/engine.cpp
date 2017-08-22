@@ -40,7 +40,7 @@ void Engine::start() {
 }
 
 void Engine::initialize_map() {
-    this->map = Map(15, 15);
+    this->map = Map(18, 18);
     this->main_ship = std::make_shared<Caravel>(200, 200);
     add_ship(this->main_ship);
     sp<Unit> pirate1 = std::make_shared<Pirate>();
@@ -53,78 +53,78 @@ void Engine::initialize_map() {
 
 void Engine::manage_input(ALLEGRO_EVENT &ev) {
     switch(ev.type) {
-            // case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-            //     // std::cerr << ev.mouse.button;
-            //     if (ev.mouse.button == 1) {
-            //         uMgr.left_unclick(ev.mouse.x, ev.mouse.y, shift);
+        // case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+        //     // std::cerr << ev.mouse.button;
+        //     if (ev.mouse.button == 1) {
+        //         uMgr.left_unclick(ev.mouse.x, ev.mouse.y, shift);
 
-            //     }
-            //     if (ev.mouse.button == 2) {
-            //         uMgr.right_unclick(ev.mouse.x, ev.mouse.y, shift);
-            //     }
-            //     break;
-            // case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-            //     if (ev.mouse.button == 1) {
-            //         uMgr.left_click(ev.mouse.x, ev.mouse.y);
-            //     }
-            //     break;
-            case ALLEGRO_EVENT_MOUSE_AXES:
-                this->camera.change_zoom(ev.mouse.dz);
-                break;
-            case ALLEGRO_EVENT_KEY_DOWN:
-                switch(ev.keyboard.keycode) {
-                    /* Check if Keyboard Modifier Flags is better */
-                    case ALLEGRO_KEY_ESCAPE:
-                        this->looping = false;
-                    case ALLEGRO_KEY_LCTRL:
-                        lctrl = true;
-                        break;
-                    case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
-                        shift = true;
-                        break;
-                    case ALLEGRO_KEY_D:
-                        turning_right = true;
-                        break;
-                    case ALLEGRO_KEY_W:
-                        this->main_ship->spread_sails();
-                        break;
-                    case ALLEGRO_KEY_S:
-                        this->main_ship->lower_sails();
-                        break;
-                    case ALLEGRO_KEY_A:
-                        turning_left = true;
-                        break;
-                    case ALLEGRO_KEY_V:
-                        this->camera.change_shot();
-                        break;
-                }
-                break;
-            case ALLEGRO_EVENT_KEY_UP:
-                switch(ev.keyboard.keycode) {
-                    case ALLEGRO_KEY_LCTRL:
-                        lctrl = false;
-                        break;
-                    case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
-                        shift = false;
-                        break;
-                    case ALLEGRO_KEY_A:
-                        turning_left = false;
-                        break;
-                    case ALLEGRO_KEY_D:
-                        turning_right = false;
-                        break;
-                }
-                break;
-            // case ALLEGRO_EVENT_MOUSE_AXES:
-            //     al_clear_to_color(al_map_rgb(0,0,0));
-            //     al_draw_bitmap(img, ev.mouse.x, ev.mouse.y, 0);
-            //     al_flip_display();
-            //     break;
-        // if (!ev) cerr << "Error en el mouse event\n";
+        //     }
+        //     if (ev.mouse.button == 2) {
+        //         uMgr.right_unclick(ev.mouse.x, ev.mouse.y, shift);
+        //     }
+        //     break;
+        // case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+        //     if (ev.mouse.button == 1) {
+        //         uMgr.left_click(ev.mouse.x, ev.mouse.y);
+        //     }
+        //     break;
+        case ALLEGRO_EVENT_MOUSE_AXES:
+            this->camera.change_zoom(ev.mouse.dz);
+            break;
+        case ALLEGRO_EVENT_KEY_DOWN:
+            switch(ev.keyboard.keycode) {
+                /* Check if Keyboard Modifier Flags is better */
+                case ALLEGRO_KEY_ESCAPE:
+                    this->looping = false;
+                case ALLEGRO_KEY_LCTRL:
+                    lctrl = true;
+                    break;
+                case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
+                    shift = true;
+                    break;
+                case ALLEGRO_KEY_D:
+                    turning_right = true;
+                    break;
+                case ALLEGRO_KEY_W:
+                    this->main_ship->spread_sails();
+                    break;
+                case ALLEGRO_KEY_S:
+                    this->main_ship->lower_sails();
+                    break;
+                case ALLEGRO_KEY_A:
+                    turning_left = true;
+                    break;
+                case ALLEGRO_KEY_V:
+                    this->camera.change_shot();
+                    break;
+            }
+            break;
+        case ALLEGRO_EVENT_KEY_UP:
+            switch(ev.keyboard.keycode) {
+                case ALLEGRO_KEY_LCTRL:
+                    lctrl = false;
+                    break;
+                case ALLEGRO_KEY_LSHIFT: case ALLEGRO_KEY_RSHIFT:
+                    shift = false;
+                    break;
+                case ALLEGRO_KEY_A:
+                    turning_left = false;
+                    break;
+                case ALLEGRO_KEY_D:
+                    turning_right = false;
+                    break;
+            }
+            break;
+        // case ALLEGRO_EVENT_MOUSE_AXES:
+        //     al_clear_to_color(al_map_rgb(0,0,0));
+        //     al_draw_bitmap(img, ev.mouse.x, ev.mouse.y, 0);
+        //     al_flip_display();
+        //     break;
+    // if (!ev) cerr << "Error en el mouse event\n";
 
-            case ALLEGRO_EVENT_DISPLAY_CLOSE:
-                this->looping = false;
-        }
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+            this->looping = false;
+    }
 }
 
 void Engine::manage_timer() {

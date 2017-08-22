@@ -19,7 +19,7 @@ void Camera::set_center(Ship *ship) {
 
 const float Camera::ZOOM_LIM_IN = 1.2;
 
-const float Camera::ZOOM_LIM_OUT = 0.3;
+const float Camera::ZOOM_LIM_OUT = 0.2;
 
 void Camera::set_transform_ship() {
     al_identity_transform(&transform);
