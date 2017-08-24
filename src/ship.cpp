@@ -23,10 +23,6 @@ void Ship::add_crew(sp<Unit> unit) {
 }
 
 void Ship::draw(Camera &camera) {
-    // move();
-    // camera.set_transform_ship();
-    DBG(position);
-
     drawable->draw(-drawable->get_width() / 2, -drawable->get_height() / 2);
     for (auto &unit : crew) {
         unit->draw();

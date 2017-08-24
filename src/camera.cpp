@@ -33,16 +33,11 @@ void Camera::set_transform_ship() {
 void Camera::set_transform_other_ship(const Vector2D &ship_pos,
                                       radians ship_rotation) {
     Vector2D translate = ship_pos - this->pos;
-    DBG(ship_pos);
-    DBG(this->pos);
     radians rotation = ship_rotation;
     if (shot == SHIP) {
-        translate = rotate(translate, -this->rotation);
-        rotation -= this->rotation;
+        translate = rotate(translate, this->rotation);
+        rotation += this->rotation;
     }
-    // DBG(ship_pos);
-    // DBG(ship_rotation);
-    // DBG(rotation);
     al_identity_transform(&transform);
     al_rotate_transform(&transform, rotation);
     al_translate_transform(&transform, translate.x, translate.y);
@@ -54,8 +49,8 @@ void Camera::set_transform_other_ship(const Vector2D &ship_pos,
 
 void Camera::set_transform_map() {
     al_identity_transform(&transform);
-    al_scale_transform(&transform, this->zoom, this->zoom);
     al_translate_transform(&transform, -pos.x, -pos.y);
+    al_scale_transform(&transform, this->zoom, this->zoom);
     if (shot == SHIP) {
         al_rotate_transform(&transform, rotation);
     }
@@ -69,16 +64,9 @@ void Camera::set_transform_identity() {
 }
 
 void Camera::set_position(const Vector2D &new_pos, radians new_rotation) {
-    /* center in x,y + size of sprite
-     * TODO unhardcorde sprite offset
-     */
-    DBG(new_pos);
+    this->pos = new_pos - Vector2D(screen_width / 2,
+                                   screen_height / 2);
     this->rotation = new_rotation;
-    this->pos = new_pos - Vector2D(screen_width / 2/* + 1090*/,
-                                   screen_height / 2/* + 1250*/);
-    // pos_x = x - screen_width / 2 + 1090;
-    // pos_y = y - screen_height / 2 + 1250;
-
 }
 
 void Camera::change_shot() {
