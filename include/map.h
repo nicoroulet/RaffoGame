@@ -29,7 +29,7 @@ public:
     Map();
     Map(int height, int width);
 
-    void draw(Camera &camera);
+    void draw(const Vector2D &camera_pos);
 private:
     std::vector<std::vector<std::shared_ptr<Drawable>>> matrix;
     int height;

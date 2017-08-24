@@ -16,7 +16,7 @@ public:
 class Ship {
 public:
     void add_crew(sp<Unit> unit);
-    void draw(Camera &camera);
+    void draw();
     void move();
     const Vector2D &pos();
     float get_rotation();

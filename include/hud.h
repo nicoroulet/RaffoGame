@@ -7,7 +7,7 @@
 class HUD {
 public:
     HUD(int width, int height, const Camera &camera);
-    void draw(Camera &camera);
+    void draw();
 
     class CompassPath {
     public:

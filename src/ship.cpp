@@ -22,7 +22,7 @@ void Ship::add_crew(sp<Unit> unit) {
     crew.push_back(unit);
 }
 
-void Ship::draw(Camera &camera) {
+void Ship::draw() {
     drawable->draw(-drawable->get_width() / 2, -drawable->get_height() / 2);
     for (auto &unit : crew) {
         unit->draw();

@@ -141,16 +141,18 @@ void Engine::manage_timer() {
     /* DRAWING */
     this->camera.set_position(this->main_ship->pos(),
                               this->main_ship->get_rotation());
-    this->map.draw(this->camera);
+    camera.set_transform_map();
+    this->map.draw(this->camera.get_pos());
     main_ship->move();
     camera.set_transform_ship();
-    main_ship->draw(this->camera);
+    main_ship->draw();
     for (auto &ship : this->ships) {
         ship->move();
         camera.set_transform_other_ship(ship->pos(), ship->get_rotation());
-        ship->draw(this->camera);
+        ship->draw();
     }
-    hud.draw(this->camera);
+    camera.set_transform_identity();
+    hud.draw();
     al_flip_display();
 }
 
