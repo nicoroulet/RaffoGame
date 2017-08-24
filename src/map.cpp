@@ -18,13 +18,13 @@ Map::Map(int height, int width) :
 
 void Map::draw(Camera &camera) {
     // FIXME this is not the right place for this
-    // al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_clear_to_color(al_map_rgb(0, 0, 0));
     camera.set_transform_map();
     int tile_size = 512; // TODO unhardcode
     // number of tile column where the camera is centered
-    int cam_tile_x = camera.get_pos_x() / tile_size;
+    int cam_tile_x = camera.get_pos().x / tile_size;
     // number of tile row where the camera is centered
-    int cam_tile_y = camera.get_pos_y() / tile_size;
+    int cam_tile_y = camera.get_pos().y / tile_size;
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
             /* Infinite map.
