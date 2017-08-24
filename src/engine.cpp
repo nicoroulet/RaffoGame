@@ -42,13 +42,17 @@ void Engine::start() {
 void Engine::initialize_map() {
     this->map = Map(18, 18);
     this->main_ship = std::make_shared<Caravel>(200, 200);
-    add_ship(this->main_ship);
+    sp<Ship> other_ship = std::make_shared<Caravel>(210, 200);
+    add_ship(other_ship);
     sp<Unit> pirate1 = std::make_shared<Pirate>();
     pirate1->set_position(25, 25);
     this->main_ship->add_crew(pirate1);
     sp<Unit> pirate2 = std::make_shared<Pirate>();
     pirate2->set_position(-50, -50);
     this->main_ship->add_crew(pirate2);
+    sp<Unit> pirate3 = std::make_shared<GreenPirate>();
+    pirate3->set_position(-50, -50);
+    other_ship->add_crew(pirate3);
 }
 
 void Engine::manage_input(ALLEGRO_EVENT &ev) {
@@ -135,14 +139,20 @@ void Engine::manage_timer() {
     // TODO: consider making camera a singleton instead of passing
 
     /* DRAWING */
-    this->camera.set_position(this->main_ship->pos_x(),
-                              this->main_ship->pos_y(),
+    this->camera.set_position(this->main_ship->pos(),
                               this->main_ship->get_rotation());
-    this->map.draw(this->camera);
+    camera.set_transform_map();
+    this->map.draw(this->camera.get_pos());
+    main_ship->move();
+    camera.set_transform_ship();
+    main_ship->draw();
     for (auto &ship : this->ships) {
-        ship->draw(this->camera);
+        ship->move();
+        camera.set_transform_other_ship(ship->pos(), ship->get_rotation());
+        ship->draw();
     }
-    hud.draw(this->camera);
+    camera.set_transform_identity();
+    hud.draw();
     al_flip_display();
 }
 

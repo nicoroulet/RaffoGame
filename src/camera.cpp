@@ -2,15 +2,14 @@
 #include "ship.h"
 #include "camera.h"
 
-Camera::Camera(int width, int height) {
-    rotation = 0.f;
-    zoom = 1.f;
-    pos_x = 0;
-    pos_y = 0;
-    screen_width = width;
-    screen_height = height;
-    shot = MAP;
-}
+Camera::Camera(int width, int height) :
+    rotation(0.f),
+    zoom(1.f),
+    pos(0, 0),
+    screen_width(width),
+    screen_height(height),
+    shot(MAP)
+    {}
 /*
 void Camera::set_center(Ship *ship) {
     center = ship;
@@ -23,23 +22,39 @@ const float Camera::ZOOM_LIM_OUT = 0.2;
 
 void Camera::set_transform_ship() {
     al_identity_transform(&transform);
-    al_scale_transform(&transform, zoom, zoom);
+    al_scale_transform(&transform, this->zoom, this->zoom);
     if (shot == MAP) {
         al_rotate_transform(&transform, -rotation);
     }
-    al_translate_transform(&transform, screen_width * 0.5, screen_height * 0.5);
+    al_translate_transform(&transform, screen_width / 2, screen_height / 2);
     al_use_transform(&transform);
 }
 
+void Camera::set_transform_other_ship(const Vector2D &ship_pos,
+                                      radians ship_rotation) {
+    Vector2D translate = ship_pos - this->pos;
+    radians rotation = ship_rotation;
+    if (shot == SHIP) {
+        translate = rotate(translate, this->rotation);
+        rotation += this->rotation;
+    }
+    al_identity_transform(&transform);
+    al_rotate_transform(&transform, rotation);
+    al_translate_transform(&transform, translate.x, translate.y);
+    al_scale_transform(&transform, this->zoom, this->zoom);
+    al_translate_transform(&transform, screen_width / 2,
+                                       screen_height / 2);
+    al_use_transform(&transform);
+}
 
 void Camera::set_transform_map() {
     al_identity_transform(&transform);
-    al_translate_transform(&transform, -pos_x, -pos_y);
+    al_translate_transform(&transform, -pos.x, -pos.y);
+    al_scale_transform(&transform, this->zoom, this->zoom);
     if (shot == SHIP) {
         al_rotate_transform(&transform, rotation);
     }
-    al_scale_transform(&transform, zoom, zoom);
-    al_translate_transform(&transform, screen_width * 0.5, screen_height * 0.5);
+    al_translate_transform(&transform, screen_width / 2, screen_height / 2);
     al_use_transform(&transform);
 }
 
@@ -48,14 +63,10 @@ void Camera::set_transform_identity() {
     al_use_transform(&transform);
 }
 
-void Camera::set_position(int x, int y, float rotate) {
-    /* center in x,y + size of sprite
-     * Hardcorded sprite offset TODO
-     */
-    rotation = rotate;
-    pos_x = x - screen_width / 2 + 1090;
-    pos_y = y - screen_height / 2 + 1250;
-
+void Camera::set_position(const Vector2D &new_pos, radians new_rotation) {
+    this->pos = new_pos - Vector2D(screen_width / 2,
+                                   screen_height / 2);
+    this->rotation = new_rotation;
 }
 
 void Camera::change_shot() {
@@ -69,12 +80,8 @@ void Camera::change_zoom(float factor) {
     if (zoom > ZOOM_LIM_IN) zoom = ZOOM_LIM_IN;
 }
 
-int Camera::get_pos_x() const {
-    return pos_x;
-}
-
-int Camera::get_pos_y() const {
-    return pos_y;
+const Vector2D &Camera::get_pos() const {
+    return pos;
 }
 
 radians Camera::get_rotation() const {

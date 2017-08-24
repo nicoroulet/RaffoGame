@@ -1,7 +1,7 @@
 #pragma once
 
 #include <allegro5/allegro.h>
-//#include "ship.h"
+#include "geometry.h"
 #include "helpers.h"
 
 enum CameraShot {
@@ -17,11 +17,12 @@ public:
     //Camera &operator=(const Camera &) = delete;
 
     //void set_center(Ship *ship);
-    int get_pos_x() const;
-    int get_pos_y() const;
+    const Vector2D &get_pos() const;
     radians get_rotation() const;
-    void set_position(int x, int y, float rotate);
+    void set_position(const Vector2D &new_pos, radians rotate);
     void set_transform_ship();
+    void set_transform_other_ship(const Vector2D &ship_pos,
+                                  radians ship_rotation);
     void set_transform_map();
     void set_transform_identity();
     void change_zoom(float factor);
@@ -29,8 +30,7 @@ public:
 
 private:
     //Ship *center;
-    int pos_x;
-    int pos_y;
+    Vector2D pos;
     radians rotation;
     float zoom;
     int screen_width;

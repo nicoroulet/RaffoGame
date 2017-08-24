@@ -6,8 +6,7 @@ HUD::HUD(int width, int height, const Camera &camera) :
     camera(camera)
     {}
 
-void HUD::draw(Camera &camera) {
-    camera.set_transform_identity();
+void HUD::draw() {
     compass.draw(compass_position.x, compass_position.y, camera.get_rotation());
 }
 

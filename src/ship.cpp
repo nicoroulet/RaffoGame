@@ -22,10 +22,7 @@ void Ship::add_crew(sp<Unit> unit) {
     crew.push_back(unit);
 }
 
-void Ship::draw(Camera &camera) {
-    move();
-    camera.set_transform_ship();
-
+void Ship::draw() {
     drawable->draw(-drawable->get_width() / 2, -drawable->get_height() / 2);
     for (auto &unit : crew) {
         unit->draw();
@@ -77,12 +74,8 @@ void Ship::lower_sails() {
     }
 }
 
-int Ship::pos_x() {
-    return position.x;
-}
-
-int Ship::pos_y() {
-    return position.y;
+const Vector2D &Ship::pos() {
+    return position;
 }
 
 float Ship::get_rotation() {
